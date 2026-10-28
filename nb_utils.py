@@ -69,7 +69,7 @@ def exercise_cells(
     ]
 
 
-def colab_badge(notebook_filename: str, repo: str = "YOUR_GH_USERNAME/numpy-course") -> str:
+def colab_badge(notebook_filename: str, repo: str = "inigoochoa/comprehensive-numpy") -> str:
     """Markdown Colab badge. `repo` is a placeholder until the course is pushed to GitHub —
     see the project README for the find/replace instructions."""
     url = f"https://colab.research.google.com/github/{repo}/blob/main/{notebook_filename}"

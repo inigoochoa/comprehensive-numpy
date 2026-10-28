@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
 CONTENT_DIR = WEB / "src" / "content" / "lessons"
 DATA_DIR = WEB / "src" / "data"
-COLAB_REPO_PLACEHOLDER = "YOUR_GH_USERNAME/comprehensive-numpy"
+COLAB_REPO_PLACEHOLDER = "inigoochoa/comprehensive-numpy"
 
 MODULES = [
     (1, "Fundamentals & Array Creation", "module_1_fundamentals.ipynb"),
