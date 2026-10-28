@@ -1,0 +1,76 @@
+---
+title: Array Attributes & Dtypes
+module: 1
+moduleTitle: Fundamentals & Array Creation
+lessonNumber: 3
+order: 103
+notebookFile: module_1_fundamentals.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m1-3.1
+- m1-3.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+Every array carries metadata describing its layout:
+
+- `.shape` — a tuple with the size along each axis
+- `.ndim` — number of axes (`len(shape)`)
+- `.size` — total number of elements
+- `.dtype` — the element type (`int64`, `float64`, `bool`, ...)
+- `.itemsize` — bytes per element
+
+NumPy infers a dtype from your data, but mixing an `int` with a `float`
+upcasts the whole array to `float64` — there is no per-element typing.
+
+```python
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+print("shape:   ", arr.shape)
+print("ndim:    ", arr.ndim)
+print("size:    ", arr.size)
+print("dtype:   ", arr.dtype)
+print("itemsize:", arr.itemsize, "bytes")
+
+mixed = np.array([1, 2, 3.5])   # one float -> whole array becomes float64
+print(mixed.dtype)
+```
+
+**Output:**
+
+```text
+shape:    (2, 3)
+ndim:     2
+size:     6
+dtype:    int64
+itemsize: 8 bytes
+float64
+```
+
+<Exercise id="m1-3.1" client:visible />
+
+One more pair of tools before the next exercise. `np.floor(x)` rounds each
+element down to the nearest integer (elementwise) — `np.ceil` and
+`np.round` work the same way for rounding up / to the nearest. And
+`np.all(bool_array)` collapses a whole boolean array down to a single
+`True`/`False`: `True` only if **every** element is `True`. `np.any` is the
+mirror image — `True` if **at least one** element is `True`.
+
+```python
+print(np.floor(np.array([1.2, 2.9, -0.5])))     # [ 1.  2. -1.]
+print(np.all(np.array([True, True, False])))     # False — not all True
+print(np.any(np.array([True, True, False])))     # True — at least one True
+```
+
+**Output:**
+
+```text
+[ 1.  2. -1.]
+False
+True
+```
+
+<Exercise id="m1-3.2" client:visible />
+

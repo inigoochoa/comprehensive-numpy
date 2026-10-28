@@ -1,0 +1,62 @@
+---
+title: Boolean Indexing
+module: 2
+moduleTitle: Indexing, Slicing & Views
+lessonNumber: 2
+order: 202
+notebookFile: module_2_indexing_views.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m2-2.1
+- m2-2.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+Comparing an array to a value produces a **boolean mask** — an array of
+`True`/`False` the same shape as the original. Indexing with that mask
+returns only the elements where it's `True`. To combine conditions, you
+must use the bitwise operators `&`, `|`, `~` (NOT Python's `and`/`or`/`not`
+— those don't work elementwise and will raise an error on arrays with more
+than one element). `np.where(condition, a, b)` is the vectorized
+if/else: pick from `a` where `condition` is True, else from `b`.
+
+Two more things come up constantly once you're working with masks. First,
+`True`/`False` behave as `1`/`0` in arithmetic, so `mask.sum()` counts how
+many elements are `True` — a quick way to count matches without reaching
+for the full aggregation toolkit (Module 4 covers `.sum()`, `.mean()`, and
+friends in depth). Second, indexing itself never mutates anything, but if
+you're about to change values and want to leave the original untouched,
+call `.copy()` first to get an independent array — Lesson 4 covers views
+vs. copies in full.
+
+```python
+arr = np.array([3, -1, 7, -5, 2, 0, 9])
+mask = arr > 0
+print(mask)
+print(arr[mask])                      # positive values only
+print(arr[(arr > 0) & (arr < 8)])     # combine with & , not "and"
+
+clipped = np.where(arr < 0, 0, arr)   # replace negatives with 0
+print(clipped)
+
+arr[arr < 0] = 0                      # assign through a mask, in place
+print(arr)
+```
+
+**Output:**
+
+```text
+[ True False  True False  True False  True]
+[3 7 2 9]
+[3 7 2]
+[3 0 7 0 2 0 9]
+[3 0 7 0 2 0 9]
+```
+
+<Exercise id="m2-2.1" client:visible />
+
+<Exercise id="m2-2.2" client:visible />
+

@@ -1,0 +1,97 @@
+---
+title: Why NumPy? ndarray vs. Python list
+module: 1
+moduleTitle: Fundamentals & Array Creation
+lessonNumber: 1
+order: 101
+notebookFile: module_1_fundamentals.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m1-1.1
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+A Python `list` is a flexible, general-purpose container: each element is a
+separate Python object, and the list itself is just an array of pointers to
+those objects. That flexibility has a cost — looping over a list in pure
+Python re-enters the interpreter for every single element.
+
+A NumPy `ndarray` is a fixed-type, contiguous block of memory. Because every
+element has the same dtype and a known size, NumPy can hand the whole loop
+off to compiled C code — this is called **vectorization**, and it's the
+single most important idea in this course.
+
+```python
+# Same logical operation, two very different implementations.
+a = [1, 2, 3, 4, 5]
+b = [10, 20, 30, 40, 50]
+
+# Python list: no "+" between lists means elementwise addition — you need a loop.
+elementwise_sum_list = [x + y for x, y in zip(a, b)]
+print("list comprehension:", elementwise_sum_list)
+
+# NumPy array: "+" IS elementwise addition, done in compiled code.
+arr_a = np.array(a)
+arr_b = np.array(b)
+print("vectorized:        ", arr_a + arr_b)
+```
+
+**Output:**
+
+```text
+list comprehension: [11, 22, 33, 44, 55]
+vectorized:         [11 22 33 44 55]
+```
+
+```python
+import time
+
+big_a = list(range(2_000_000))
+big_b = list(range(2_000_000))
+
+start = time.perf_counter()
+_ = [x + y for x, y in zip(big_a, big_b)]
+print(f"Python loop:   {time.perf_counter() - start:.4f}s")
+
+np_a = np.array(big_a)
+np_b = np.array(big_b)
+
+start = time.perf_counter()
+_ = np_a + np_b
+print(f"NumPy vectorized: {time.perf_counter() - start:.4f}s")
+```
+
+**Output:**
+
+```text
+Python loop:   0.1164s
+NumPy vectorized: 0.0154s
+```
+
+One more comparison you'll use constantly — including in this course's own
+"check" cells, starting with the very next exercise: `==` between two arrays
+compares **elementwise** and gives you back an array of booleans, not a
+single answer. When you want one `True`/`False` for "are these two arrays
+the same?", use `np.array_equal(a, b)` instead — it checks that both arrays
+have the same shape and that every element matches.
+
+```python
+a = np.array([1, 2, 3])
+b = np.array([1, 2, 3])
+
+print(a == b)                  # elementwise: array([ True,  True,  True])
+print(np.array_equal(a, b))    # one answer: True
+```
+
+**Output:**
+
+```text
+[ True  True  True]
+True
+```
+
+<Exercise id="m1-1.1" client:visible />
+

@@ -1,0 +1,524 @@
+{
+  "m1-1.1": {
+    "localId": "1.1",
+    "title": "No loops allowed",
+    "problem": "Write `elementwise_product(a, b)` that takes two same-length Python `list`s\nof numbers and returns a NumPy array containing their elementwise product.\nYou may **not** use a `for` loop, `while` loop, or list/generator\ncomprehension anywhere in your implementation — convert to arrays and let\nNumPy do the work.",
+    "stub": "def elementwise_product(a, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = elementwise_product([1, 2, 3], [4, 5, 6])\nprint(\"elementwise_product([1, 2, 3], [4, 5, 6]) ->\")\nprint(result)\n\nexpected = np.array([4, 10, 18])\n_passed = (\n    isinstance(result, np.ndarray)\n    and np.array_equal(result, expected)\n    and np.array_equal(elementwise_product([0, -1], [5, 5]), np.array([0, -5]))\n)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Convert both lists to arrays with `np.array(...)`, then use the `*` operator.",
+    "solution": "def elementwise_product(a, b):\n    return np.array(a) * np.array(b)\n"
+  },
+  "m1-2.1": {
+    "localId": "2.1",
+    "title": "Build a checkerboard",
+    "problem": "Write `checkerboard(n)` that returns an `(n, n)` array of `int` dtype\ncontaining a checkerboard pattern of `0`s and `1`s, where position `(0, 0)`\nis `1`. For `n=4` the result should be:\n\n```\n[[1 0 1 0]\n [0 1 0 1]\n [1 0 1 0]\n [0 1 0 1]]\n```",
+    "stub": "def checkerboard(n):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = checkerboard(4)\nprint(\"checkerboard(4) ->\")\nprint(result)\n\nexpected = np.array([[1, 0, 1, 0],\n                      [0, 1, 0, 1],\n                      [1, 0, 1, 0],\n                      [0, 1, 0, 1]])\n_passed = np.array_equal(result, expected) and checkerboard(2).tolist() == [[1, 0], [0, 1]]\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Build an `(n, n)` array of zeros with `np.zeros`, then use slicing with a step of 2 on rows and columns — `board[0::2, 0::2]` and `board[1::2, 1::2]` — to set the right cells to 1.",
+    "solution": "def checkerboard(n):\n    board = np.zeros((n, n), dtype=int)\n    board[0::2, 0::2] = 1\n    board[1::2, 1::2] = 1\n    return board\n"
+  },
+  "m1-3.1": {
+    "localId": "3.1",
+    "title": "Describe an array",
+    "problem": "Write `describe(arr)` that returns a dict with keys `\"shape\"`, `\"ndim\"`,\n`\"size\"`, and `\"dtype_name\"` (the dtype as a string, e.g. `\"int64\"`) for the\ngiven array.",
+    "stub": "def describe(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = describe(np.zeros((3, 4)))\nprint(\"describe(np.zeros((3, 4))) ->\")\nprint(result)\n\nexpected = {\"shape\": (3, 4), \"ndim\": 2, \"size\": 12, \"dtype_name\": \"float64\"}\n_passed = (\n    result.get(\"shape\") == expected[\"shape\"]\n    and result.get(\"ndim\") == expected[\"ndim\"]\n    and result.get(\"size\") == expected[\"size\"]\n    and \"float\" in str(result.get(\"dtype_name\"))\n)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`str(arr.dtype)` gives you the dtype name as a string.",
+    "solution": "def describe(arr):\n    return {\n        \"shape\": arr.shape,\n        \"ndim\": arr.ndim,\n        \"size\": arr.size,\n        \"dtype_name\": str(arr.dtype),\n    }\n"
+  },
+  "m1-3.2": {
+    "localId": "3.2",
+    "title": "Safe integer casting",
+    "problem": "Write `to_int_safe(arr)` that casts a float array to `int64` using\n`.astype`, but raises a `ValueError` (with any message) if doing so would\nsilently truncate a non-integer value (e.g. casting `2.5` to `2`).",
+    "stub": "def to_int_safe(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = to_int_safe(np.array([1.0, 2.0, 3.0]))\nprint(\"to_int_safe(np.array([1.0, 2.0, 3.0])) ->\")\nprint(result, \"dtype:\", result.dtype)\n\nok_basic = result.dtype == np.int64 and np.array_equal(result, [1, 2, 3])\n\ntry:\n    to_int_safe(np.array([1.0, 2.5]))\n    raised_value_error = False\nexcept ValueError:\n    raised_value_error = True\nexcept Exception:\n    raised_value_error = False\n\nprint()\nprint(\"to_int_safe(np.array([1.0, 2.5])) ->\",\n      \"raised ValueError\" if raised_value_error else \"did NOT raise ValueError\")\n\n_passed = ok_basic and raised_value_error\n\nif not _passed:\n    print()\n    print(\"Expected: [1 2 3] with dtype int64, and a ValueError for [1.0, 2.5]\")\n",
+    "hint": "Compare `arr` to `np.floor(arr)` elementwise with `==`, then wrap that in `np.all(...)` to get a single True/False before deciding whether to cast.",
+    "solution": "def to_int_safe(arr):\n    if not np.all(arr == np.floor(arr)):\n        raise ValueError(\"array contains non-integer values\")\n    return arr.astype(np.int64)\n"
+  },
+  "m1-4.1": {
+    "localId": "4.1",
+    "title": "Flatten and pair up",
+    "problem": "Write `to_pairs(arr)` that takes an array of any shape with an even number\nof elements and returns it reshaped into shape `(-1, 2)` — i.e. a sequence\nof `[a, b]` pairs, read in row-major (C) order.",
+    "stub": "def to_pairs(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = to_pairs(np.array([[1, 2, 3], [4, 5, 6]]))\nprint(\"to_pairs(np.array([[1, 2, 3], [4, 5, 6]])) ->\")\nprint(result)\n\nexpected = np.array([[1, 2], [3, 4], [5, 6]])\n_passed = np.array_equal(result, expected) and to_pairs(np.arange(4)).shape == (2, 2)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`.ravel()` first to get a flat 1-D sequence, then `.reshape(-1, 2)`.",
+    "solution": "def to_pairs(arr):\n    return arr.ravel().reshape(-1, 2)\n"
+  },
+  "m1-5.1": {
+    "localId": "5.1",
+    "title": "Interleave two signals",
+    "problem": "Write `interleave(a, b)` that takes two 1-D arrays of the same length `n`\nand returns a single 1-D array of length `2n` where values alternate:\n`[a[0], b[0], a[1], b[1], ...]`. Do this using `np.stack` and `reshape` —\nno Python loop.",
+    "stub": "def interleave(a, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = interleave(np.array([1, 3, 5]), np.array([2, 4, 6]))\nprint(\"interleave(np.array([1, 3, 5]), np.array([2, 4, 6])) ->\")\nprint(result)\n\nexpected = np.array([1, 2, 3, 4, 5, 6])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`np.stack([a, b], axis=1)` gives you an `(n, 2)` array of pairs — flatten that.",
+    "solution": "def interleave(a, b):\n    return np.stack([a, b], axis=1).ravel()\n"
+  },
+  "m2-1.1": {
+    "localId": "1.1",
+    "title": "Border of a grid",
+    "problem": "Write `border(grid)` that takes a 2-D array and returns its last row\nreversed — i.e. `grid[-1][::-1]`.",
+    "stub": "def border(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "g = np.arange(9).reshape(3, 3)\nresult = border(g)\nprint(\"border(np.arange(9).reshape(3, 3)) ->\")\nprint(result)\n\nexpected = np.array([8, 7, 6])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Index the last row with `grid[-1]`, then reverse it with `[::-1]`.",
+    "solution": "def border(grid):\n    return grid[-1][::-1]\n"
+  },
+  "m2-1.2": {
+    "localId": "1.2",
+    "title": "Every other row and column",
+    "problem": "Write `downsample(grid)` that returns every other row AND every other\ncolumn of a 2-D array, starting from index 0 (i.e. `grid[0::2, 0::2]`).",
+    "stub": "def downsample(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "g = np.arange(16).reshape(4, 4)\nresult = downsample(g)\nprint(\"downsample(np.arange(16).reshape(4, 4)) ->\")\nprint(result)\n\nexpected = np.array([[0, 2], [8, 10]])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Apply a step-2 slice to both axes at once: `grid[0::2, 0::2]`.",
+    "solution": "def downsample(grid):\n    return grid[0::2, 0::2]\n"
+  },
+  "m2-2.1": {
+    "localId": "2.1",
+    "title": "Clip to a range",
+    "problem": "Write `clip_range(arr, low, high)` that returns a **new** array where every\nvalue below `low` is replaced by `low`, and every value above `high` is\nreplaced by `high` (values already in range are unchanged). Do not use\n`np.clip` — build it from boolean masks and `np.where` (or boolean\nassignment on a copy) to practice the mechanics.",
+    "stub": "def clip_range(arr, low, high):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = clip_range(np.array([-5, 0, 3, 10, 15]), 0, 10)\nprint(\"clip_range(np.array([-5, 0, 3, 10, 15]), 0, 10) ->\")\nprint(result)\n\nexpected = np.array([0, 0, 3, 10, 10])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Make a copy first (`out = arr.copy()`), then assign through two masks: `out[out < low] = low` and `out[out > high] = high`.",
+    "solution": "def clip_range(arr, low, high):\n    out = arr.copy()\n    out[out < low] = low\n    out[out > high] = high\n    return out\n"
+  },
+  "m2-2.2": {
+    "localId": "2.2",
+    "title": "Count values in a band",
+    "problem": "Write `count_in_band(arr, low, high)` that returns how many elements of\n`arr` satisfy `low <= x <= high`, as a plain Python `int`.",
+    "stub": "def count_in_band(arr, low, high):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = count_in_band(np.array([1, 5, 8, 12, 20]), 5, 12)\nprint(\"count_in_band(np.array([1, 5, 8, 12, 20]), 5, 12) ->\")\nprint(result)\n\nexpected = 3\n_passed = result == expected and isinstance(result, int)\n\nif not _passed:\n    print()\n    print(\"Expected:\", expected, \"(as a plain Python int)\")\n",
+    "hint": "Combine two comparisons with `&`, then `.sum()` the boolean mask — `True` counts as 1. Wrap the result in `int(...)`.",
+    "solution": "def count_in_band(arr, low, high):\n    mask = (arr >= low) & (arr <= high)\n    return int(mask.sum())\n"
+  },
+  "m2-3.1": {
+    "localId": "3.1",
+    "title": "Reorder rows",
+    "problem": "Write `reorder_rows(grid, order)` that takes a 2-D array and a list of row\nindices `order`, and returns a new array with the rows rearranged into that\norder (rows may repeat or be dropped).",
+    "stub": "def reorder_rows(grid, order):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "g = np.arange(9).reshape(3, 3)\nresult = reorder_rows(g, [2, 0, 0])\nprint(\"reorder_rows(np.arange(9).reshape(3, 3), [2, 0, 0]) ->\")\nprint(result)\n\nexpected = np.array([[6, 7, 8], [0, 1, 2], [0, 1, 2]])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Fancy-index the row axis directly: `grid[order]`.",
+    "solution": "def reorder_rows(grid, order):\n    return grid[order]\n"
+  },
+  "m2-3.2": {
+    "localId": "3.2",
+    "title": "Diagonal via coordinates",
+    "problem": "Write `pick_diagonal(grid)` that returns the main diagonal of a square 2-D\narray using **paired fancy indexing** (`grid[rows, cols]`), not\n`np.diagonal` or `np.diag`.",
+    "stub": "def pick_diagonal(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "g = np.arange(9).reshape(3, 3)\nresult = pick_diagonal(g)\nprint(\"pick_diagonal(np.arange(9).reshape(3, 3)) ->\")\nprint(result)\n\nexpected = np.array([0, 4, 8])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Build row and column index arrays with `np.arange(len(grid))` and use them both: `grid[idx, idx]`.",
+    "solution": "def pick_diagonal(grid):\n    idx = np.arange(len(grid))\n    return grid[idx, idx]\n"
+  },
+  "m2-4.1": {
+    "localId": "4.1",
+    "title": "A function that must not mutate its input",
+    "problem": "Write `double_first_n(arr, n)` that returns a **new** array equal to `arr`\nbut with its first `n` elements doubled. Calling this function must leave\nthe original `arr` completely unchanged — a common bug is slicing (which\ngives a view) and then mutating in place.",
+    "stub": "def double_first_n(arr, n):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "original = np.array([1, 2, 3, 4, 5])\nresult = double_first_n(original, 3)\nprint(\"double_first_n(np.array([1, 2, 3, 4, 5]), 3) ->\")\nprint(result)\nprint()\nprint(\"original array after the call ->\", original)\n\nexpected = np.array([2, 4, 6, 4, 5])\noriginal_unchanged = np.array_equal(original, np.array([1, 2, 3, 4, 5]))\n_passed = np.array_equal(result, expected) and original_unchanged\n\nif not _passed:\n    print()\n    print(\"Expected result:\", expected, \"- and the original should still read [1 2 3 4 5]\")\n",
+    "hint": "Start from `arr.copy()`, not from `arr` directly or a slice of it — then mutate the copy freely.",
+    "solution": "def double_first_n(arr, n):\n    out = arr.copy()\n    out[:n] *= 2\n    return out\n"
+  },
+  "m2-4.2": {
+    "localId": "4.2",
+    "title": "Is it a view?",
+    "problem": "Write `is_view_of(sub, original)` that returns `True` if `sub` is a view\ninto `original`'s memory (i.e. shares its buffer), and `False` if `sub` is\nan independent copy. Hint: this should work for both the array returned by\nslicing AND the array itself (`original.base is None`, but it IS the data\n— treat that case as \"not a copy\", i.e. return `True` only when `sub` is\ngenuinely backed by `original`'s memory).",
+    "stub": "def is_view_of(sub, original):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "original = np.arange(10)\nview = original[2:5]\ncopy = original[2:5].copy()\nfancy = original[[2, 3, 4]]\n\nr_view = is_view_of(view, original)\nr_copy = is_view_of(copy, original)\nr_fancy = is_view_of(fancy, original)\nprint(\"is_view_of(original[2:5], original) ->\", r_view)\nprint(\"is_view_of(original[2:5].copy(), original) ->\", r_copy)\nprint(\"is_view_of(original[[2, 3, 4]], original) ->\", r_fancy)\n\n_passed = (r_view == True) and (r_copy == False) and (r_fancy == False)\n\nif not _passed:\n    print()\n    print(\"Expected: True, False, False\")\n",
+    "hint": "`np.shares_memory(sub, original)` answers exactly this question and handles all the edge cases correctly — no need to reinvent it with `.base`.",
+    "solution": "def is_view_of(sub, original):\n    return bool(np.shares_memory(sub, original))\n"
+  },
+  "m2-5.1": {
+    "localId": "5.1",
+    "title": "To column vector",
+    "problem": "Write `to_column(v)` that takes a 1-D array of shape `(n,)` and returns it\nreshaped to a column vector of shape `(n, 1)` using `np.newaxis` (not\n`.reshape`).",
+    "stub": "def to_column(v):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = to_column(np.array([1, 2, 3]))\nprint(\"to_column(np.array([1, 2, 3])) ->\")\nprint(result)\nprint(\"shape:\", result.shape)\n\n_passed = result.shape == (3, 1) and np.array_equal(result.ravel(), np.array([1, 2, 3]))\n\nif not _passed:\n    print()\n    print(\"Expected shape (3, 1) containing [1, 2, 3]\")\n",
+    "hint": "`v[:, np.newaxis]` adds a new axis at position 1.",
+    "solution": "def to_column(v):\n    return v[:, np.newaxis]\n"
+  },
+  "m2-5.2": {
+    "localId": "5.2",
+    "title": "First channel of any stack of images",
+    "problem": "Write `first_channel(images)` that takes an array of shape\n`(n_images, height, width, n_channels)` (or any number of leading axes\nfollowed by a channel axis last) and returns just channel 0 for every\nimage, using `...` so your function works regardless of how many\nleading axes there are.",
+    "stub": "def first_channel(images):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "imgs = np.arange(2 * 4 * 4 * 3).reshape(2, 4, 4, 3)\nresult = first_channel(imgs)\nprint(\"first_channel(imgs) with imgs.shape ==\", imgs.shape, \"->\")\nprint(result)\n\nexpected = imgs[:, :, :, 0]\n_passed = result.shape == (2, 4, 4) and np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`images[..., 0]` takes channel 0 regardless of how many axes come before it.",
+    "solution": "def first_channel(images):\n    return images[..., 0]\n"
+  },
+  "m3-1.1": {
+    "localId": "1.1",
+    "title": "Operators in disguise",
+    "problem": "Write `same_result(a, b)` that returns `True` if `a + b` (operator form) and\n`np.add(a, b)` (explicit ufunc form) produce exactly equal arrays for the\ngiven inputs, `False` otherwise. Use this to convince yourself they're\nalways the same operation.",
+    "stub": "def same_result(a, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = same_result(np.array([1, 2, 3]), np.array([4, 5, 6]))\nprint(\"same_result(np.array([1, 2, 3]), np.array([4, 5, 6])) ->\")\nprint(result)\n\n_passed = (\n    result is True\n    and same_result(np.array([1.5, 2.5]), np.array([0.5, 0.5])) is True\n)\n\nif not _passed:\n    print()\n    print(\"Expected: True\")\n",
+    "hint": "Use `np.array_equal` to compare `a + b` with `np.add(a, b)`, and wrap the result in `bool(...)` so you return a plain Python bool.",
+    "solution": "def same_result(a, b):\n    return bool(np.array_equal(a + b, np.add(a, b)))\n"
+  },
+  "m3-1.2": {
+    "localId": "1.2",
+    "title": "Normalize with ufuncs only",
+    "problem": "Write `rescale(arr)` that maps every value of a float array into the\n`[0, 1]` range using the formula `(x - min) / (max - min)`, using only\nufuncs/array ops (`.min()`, `.max()`, `-`, `/`) — no Python loop.",
+    "stub": "def rescale(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = rescale(np.array([0.0, 5.0, 10.0]))\nprint(\"rescale(np.array([0.0, 5.0, 10.0])) ->\")\nprint(result)\n\nexpected = np.array([0.0, 0.5, 1.0])\n_passed = np.allclose(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`arr.min()` and `arr.max()` give you scalars; subtract and divide the whole array by them at once.",
+    "solution": "def rescale(arr):\n    lo, hi = arr.min(), arr.max()\n    return (arr - lo) / (hi - lo)\n"
+  },
+  "m3-2.1": {
+    "localId": "2.1",
+    "title": "Predict, then verify",
+    "problem": "Write `broadcast_shape(shape_a, shape_b)` that takes two shape **tuples**\nand returns the resulting broadcast shape as a tuple, by actually creating\n`np.zeros` arrays of those shapes, adding them, and reading off `.shape`.\nIf broadcasting is impossible, return `None` instead of raising.",
+    "stub": "def broadcast_shape(shape_a, shape_b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = broadcast_shape((3, 1), (1, 4))\nprint(\"broadcast_shape((3, 1), (1, 4)) ->\")\nprint(result)\n\n_passed = (\n    result == (3, 4)\n    and broadcast_shape((5,), (1,)) == (5,)\n    and broadcast_shape((3,), (4,)) is None\n)\n\nif not _passed:\n    print()\n    print(\"Expected: (3, 4)\")\n",
+    "hint": "Wrap the addition in a `try/except ValueError` and return `None` in the `except` branch; otherwise return `(a + b).shape`.",
+    "solution": "def broadcast_shape(shape_a, shape_b):\n    try:\n        result = np.zeros(shape_a) + np.zeros(shape_b)\n        return result.shape\n    except ValueError:\n        return None\n"
+  },
+  "m3-2.2": {
+    "localId": "2.2",
+    "title": "Per-row normalization",
+    "problem": "Write `subtract_row_means(matrix)` that takes a 2-D array and returns a new\narray where the mean of each **row** has been subtracted from that row —\nusing broadcasting, not a loop over rows.",
+    "stub": "def subtract_row_means(matrix):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "m = np.array([[1.0, 2.0, 3.0], [10.0, 20.0, 30.0]])\nresult = subtract_row_means(m)\nprint(\"subtract_row_means(m) ->\")\nprint(result)\n\n_passed = np.allclose(result.mean(axis=1), [0.0, 0.0]) and np.allclose(result[0], [-1.0, 0.0, 1.0])\n\nif not _passed:\n    print()\n    print(\"Expected: each row's mean is 0, with row 0 == [-1. 0. 1.]\")\n",
+    "hint": "`matrix.mean(axis=1)` gives one mean per row as a 1-D array of shape `(n_rows,)` — you need it as `(n_rows, 1)` to broadcast correctly against `matrix`. Use `[:, np.newaxis]` (or `keepdims=True` in `.mean`).",
+    "solution": "def subtract_row_means(matrix):\n    row_means = matrix.mean(axis=1, keepdims=True)\n    return matrix - row_means\n"
+  },
+  "m3-3.1": {
+    "localId": "3.1",
+    "title": "De-loop a threshold function",
+    "problem": "Here is a loop-based function:\n\n```python\ndef flag_outliers_loop(values, threshold):\n    flags = []\n    for v in values:\n        flags.append(abs(v) > threshold)\n    return flags\n```\n\nWrite `flag_outliers_vectorized(values, threshold)` that takes a NumPy array\nand a scalar threshold, and returns a **boolean NumPy array** with the same\nresult — no loop, no comprehension.",
+    "stub": "def flag_outliers_vectorized(values, threshold):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = flag_outliers_vectorized(np.array([1, -10, 3, 8]), 5)\nprint(\"flag_outliers_vectorized(np.array([1, -10, 3, 8]), 5) ->\")\nprint(result)\n\nexpected = np.array([False, True, False, True])\n_passed = result.dtype == np.bool_ and np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`np.abs(values) > threshold` is already a full boolean array — that's the whole function.",
+    "solution": "def flag_outliers_vectorized(values, threshold):\n    return np.abs(values) > threshold\n"
+  },
+  "m3-3.2": {
+    "localId": "3.2",
+    "title": "Vectorized running total check",
+    "problem": "Write `matches_cumulative_sum(values, running_totals)` that checks, without\nany explicit Python loop, whether `running_totals` equals the cumulative\nsum of `values` (i.e. `running_totals[i] == sum(values[:i+1])` for every\n`i`). Return a single `bool`.",
+    "stub": "def matches_cumulative_sum(values, running_totals):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "v = np.array([1, 2, 3, 4])\ngood = np.array([1, 3, 6, 10])\nbad = np.array([1, 3, 7, 10])\n\nresult_good = matches_cumulative_sum(v, good)\nprint(\"matches_cumulative_sum(v, good) ->\")\nprint(result_good)\n\nresult_bad = matches_cumulative_sum(v, bad)\nprint(\"matches_cumulative_sum(v, bad) ->\")\nprint(result_bad)\n\n_passed = result_good is True and result_bad is False\n\nif not _passed:\n    print()\n    print(\"Expected: True for `good`, False for `bad`\")\n",
+    "hint": "`np.cumsum(values)` computes the running total in one call; compare it to `running_totals` with `np.array_equal`.",
+    "solution": "def matches_cumulative_sum(values, running_totals):\n    return bool(np.array_equal(np.cumsum(values), running_totals))\n"
+  },
+  "m3-4.1": {
+    "localId": "4.1",
+    "title": "Classify values",
+    "problem": "Write `classify(arr)` that returns an array of strings the same length as\n`arr`, where each element is `\"negative\"`, `\"zero\"`, or `\"positive\"`\ndepending on the sign of the corresponding input value. Use `np.where`\n(you'll need it twice, nested) — no loop.",
+    "stub": "def classify(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = classify(np.array([-5, 0, 7]))\nprint(\"classify(np.array([-5, 0, 7])) ->\")\nprint(list(result))\n\nexpected = [\"negative\", \"zero\", \"positive\"]\n_passed = list(result) == expected\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "First handle the positive/non-positive split with one `np.where`, then wrap that call in a second `np.where` that handles the zero case.",
+    "solution": "def classify(arr):\n    return np.where(arr > 0, \"positive\", np.where(arr == 0, \"zero\", \"negative\"))\n"
+  },
+  "m3-4.2": {
+    "localId": "4.2",
+    "title": "Close enough",
+    "problem": "Write `count_close_pairs(a, b, tol)` that returns how many positions `i`\nsatisfy `np.isclose(a[i], b[i], atol=tol)`, as a plain Python `int`.",
+    "stub": "def count_close_pairs(a, b, tol):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "a = np.array([1.0, 2.0, 3.0001])\nb = np.array([1.0001, 2.5, 3.0])\nresult = count_close_pairs(a, b, tol=0.01)\nprint(\"count_close_pairs(a, b, tol=0.01) ->\")\nprint(result)\n\n_passed = result == 2\n\nif not _passed:\n    print()\n    print(\"Expected: 2\")\n",
+    "hint": "`np.isclose(a, b, atol=tol)` gives a boolean array; `.sum()` on a boolean array counts the `True`s.",
+    "solution": "def count_close_pairs(a, b, tol):\n    return int(np.isclose(a, b, atol=tol).sum())\n"
+  },
+  "m3-5.1": {
+    "localId": "5.1",
+    "title": "Pairwise squared distances",
+    "problem": "Write `pairwise_sq_dist(a, b)` that takes two 1-D arrays and returns a 2-D\narray of shape `(len(a), len(b))` where entry `[i, j]` is\n`(a[i] - b[j]) ** 2`. No nested loop — use broadcasting with `np.newaxis`.",
+    "stub": "def pairwise_sq_dist(a, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = pairwise_sq_dist(np.array([0, 1]), np.array([0, 2, 3]))\nprint(\"pairwise_sq_dist(np.array([0, 1]), np.array([0, 2, 3])) ->\")\nprint(result)\n\nexpected = np.array([[0, 4, 9], [1, 1, 4]])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`a[:, np.newaxis]` has shape `(len(a), 1)`; `b[np.newaxis, :]` has shape `(1, len(b))`. Subtract them, then square.",
+    "solution": "def pairwise_sq_dist(a, b):\n    return (a[:, np.newaxis] - b[np.newaxis, :]) ** 2\n"
+  },
+  "m3-5.2": {
+    "localId": "5.2",
+    "title": "Multiplication table",
+    "problem": "Write `multiplication_table(n)` that returns the `n x n` multiplication\ntable (entry `[i, j]` equals `(i+1) * (j+1)`) using `np.outer` on\n`np.arange(1, n+1)` — not a loop.",
+    "stub": "def multiplication_table(n):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = multiplication_table(3)\nprint(\"multiplication_table(3) ->\")\nprint(result)\n\nexpected = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`np.arange(1, n + 1)` gives `[1, 2, ..., n]`; pass it to `np.outer` twice (as both arguments).",
+    "solution": "def multiplication_table(n):\n    r = np.arange(1, n + 1)\n    return np.outer(r, r)\n"
+  },
+  "m3-6.1": {
+    "localId": "6.1",
+    "title": "Vectorize the scoring function",
+    "problem": "Write `score_vectorized_checked(values)` that reproduces `score_loop`'s\nbehavior exactly (clip to `[0, 100]`, then `+10` bonus if the clipped value\nis `> 80`) using only `np.clip` and `np.where` — no loop, no\n`np.vectorize`. Return a NumPy array.",
+    "stub": "def score_vectorized_checked(values):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "values = np.array([-5, 50, 85, 120])\nresult = score_vectorized_checked(values)\nprint(\"score_vectorized_checked(np.array([-5, 50, 85, 120])) ->\")\nprint(result)\n\nexpected = np.array(score_loop(list(values)))\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Clip first with `np.clip(values, 0, 100)`, then use `np.where` on the clipped result to add the bonus conditionally.",
+    "solution": "def score_vectorized_checked(values):\n    clipped = np.clip(values, 0, 100)\n    return np.where(clipped > 80, clipped + 10, clipped)\n"
+  },
+  "m3-6.2": {
+    "localId": "6.2",
+    "title": "Spot the fake vectorization",
+    "problem": "Write `is_real_ufunc_pipeline(func)` that takes a function and returns\n`False` if `func` is an instance of `np.vectorize` (i.e. built by wrapping a\nscalar Python function), and `True` otherwise. This is a quick sanity check\nyou can literally run on your own code to catch accidental fake\nvectorization.",
+    "stub": "def is_real_ufunc_pipeline(func):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "fake = np.vectorize(lambda v: v * 2)\nresult_fake = is_real_ufunc_pipeline(fake)\nprint(\"is_real_ufunc_pipeline(np.vectorize(...)) ->\")\nprint(result_fake)\n\nresult_real = is_real_ufunc_pipeline(score_vectorized)\nprint(\"is_real_ufunc_pipeline(score_vectorized) ->\")\nprint(result_real)\n\n_passed = result_fake is False and result_real is True\n\nif not _passed:\n    print()\n    print(\"Expected: False for the np.vectorize-wrapped function, True for score_vectorized\")\n",
+    "hint": "Use `isinstance(func, np.vectorize)`.",
+    "solution": "def is_real_ufunc_pipeline(func):\n    return not isinstance(func, np.vectorize)\n"
+  },
+  "m4-1.1": {
+    "localId": "1.1",
+    "title": "Column-normalize a matrix",
+    "problem": "Write `normalize_columns(grid)` that returns a copy of `grid` where each\n**column** has been divided by that column's sum, so every column sums to\n`1.0`. `grid` is a 2-D array of positive floats.",
+    "stub": "def normalize_columns(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "grid = np.array([[1.0, 2.0], [3.0, 2.0]])\nresult = normalize_columns(grid)\nprint(\"normalize_columns(grid) ->\")\nprint(result)\n\nexpected = np.array([[0.25, 0.5], [0.75, 0.5]])\n_passed = np.allclose(result.sum(axis=0), [1.0, 1.0]) and np.allclose(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Divide `grid` by `grid.sum(axis=0)` — broadcasting lines up a length-`n_cols` array against each row automatically.",
+    "solution": "def normalize_columns(grid):\n    return grid / grid.sum(axis=0)\n"
+  },
+  "m4-1.2": {
+    "localId": "1.2",
+    "title": "Row-wise range",
+    "problem": "Write `row_ranges(grid)` that returns a 1-D array with, for each row, the\ndifference between that row's max and min value (`max - min`).",
+    "stub": "def row_ranges(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "grid = np.array([[1, 5, 3], [10, 2, 8]])\nresult = row_ranges(grid)\nprint(\"row_ranges(grid) ->\")\nprint(result)\n\nexpected = np.array([4, 8])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`grid.max(axis=1) - grid.min(axis=1)`.",
+    "solution": "def row_ranges(grid):\n    return grid.max(axis=1) - grid.min(axis=1)\n"
+  },
+  "m4-2.1": {
+    "localId": "2.1",
+    "title": "Find the hotspot",
+    "problem": "Write `hotspot(grid)` that returns the `(row, col)` coordinates (as a tuple\nof two Python ints) of the single largest value in a 2-D array.",
+    "stub": "def hotspot(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "grid = np.array([[1, 2], [9, 3]])\nresult = hotspot(grid)\nprint(\"hotspot(grid) ->\")\nprint(result)\n\ngrid2 = np.array([[5, 1, 2], [3, 4, 9]])\nresult2 = hotspot(grid2)\nprint(\"hotspot(grid2) ->\")\nprint(result2)\n\n_passed = result == (1, 0) and result2 == (1, 2)\n\nif not _passed:\n    print()\n    print(\"Expected: (1, 0) and (1, 2)\")\n",
+    "hint": "`np.unravel_index(grid.argmax(), grid.shape)` gives you the coordinates as numpy integers — wrap each in `int(...)` for plain Python ints.",
+    "solution": "def hotspot(grid):\n    row, col = np.unravel_index(grid.argmax(), grid.shape)\n    return (int(row), int(col))\n"
+  },
+  "m4-2.2": {
+    "localId": "2.2",
+    "title": "Best score per student",
+    "problem": "Each row of `scores` is one student's scores across several tests. Write\n`best_test_per_student(scores)` that returns a 1-D array with, for each\nstudent (row), the **index** (0-based, position within that row) of their\nbest test.",
+    "stub": "def best_test_per_student(scores):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "scores = np.array([[70, 95, 60], [88, 40, 91]])\nresult = best_test_per_student(scores)\nprint(\"best_test_per_student(scores) ->\")\nprint(result)\n\nexpected = np.array([1, 2])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "You want one argmax per row — that's `axis=1`.",
+    "solution": "def best_test_per_student(scores):\n    return scores.argmax(axis=1)\n"
+  },
+  "m4-3.1": {
+    "localId": "3.1",
+    "title": "Rank the runners",
+    "problem": "Write `top_n_names(names, times, n)` that returns the `n` names (as a NumPy\narray of strings) belonging to the **smallest** `n` values in `times` —\ni.e. the fastest `n` runners — ordered from fastest to slowest. `names`\nand `times` are same-length 1-D arrays.",
+    "stub": "def top_n_names(names, times, n):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "names = np.array([\"alice\", \"bob\", \"cara\", \"dan\"])\ntimes = np.array([12.3, 10.1, 15.0, 9.8])\nresult = top_n_names(names, times, 2)\nprint(\"top_n_names(names, times, 2) ->\")\nprint(result)\n\nexpected = [\"dan\", \"bob\"]\n_passed = list(result) == expected\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`np.argsort(times)` gives ascending order (fastest first, since lower time is better); slice the first `n` of `names[order]`.",
+    "solution": "def top_n_names(names, times, n):\n    order = np.argsort(times)\n    return names[order][:n]\n"
+  },
+  "m4-3.2": {
+    "localId": "3.2",
+    "title": "Sort each row independently",
+    "problem": "Write `sort_rows_desc(grid)` that returns a copy of `grid` with each row\nsorted in **descending** order (columns no longer correspond to anything\nmeaningful across rows — that's expected).",
+    "stub": "def sort_rows_desc(grid):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "grid = np.array([[3, 1, 2], [9, 7, 8]])\nresult = sort_rows_desc(grid)\nprint(\"sort_rows_desc(grid) ->\")\nprint(result)\n\nexpected = np.array([[3, 2, 1], [9, 8, 7]])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Sort ascending along `axis=1` with `np.sort`, then reverse each row with `[:, ::-1]`.",
+    "solution": "def sort_rows_desc(grid):\n    return np.sort(grid, axis=1)[:, ::-1]\n"
+  },
+  "m4-4.1": {
+    "localId": "4.1",
+    "title": "Most common value",
+    "problem": "Write `most_common(arr)` that returns the most frequently occurring value\nin a 1-D array. Assume there's a unique winner (no ties to break).",
+    "stub": "def most_common(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = most_common(np.array([1, 2, 2, 3, 2]))\nprint(\"most_common(np.array([1, 2, 2, 3, 2])) ->\")\nprint(result)\n\nresult2 = most_common(np.array([\"a\", \"b\", \"b\", \"a\", \"a\"]))\nprint(\"most_common(np.array(['a', 'b', 'b', 'a', 'a'])) ->\")\nprint(result2)\n\n_passed = result == 2 and result2 == \"a\"\n\nif not _passed:\n    print()\n    print(\"Expected: 2 and 'a'\")\n",
+    "hint": "`np.unique(arr, return_counts=True)` gives you `(values, counts)` — find the index of the largest count with `.argmax()` and index into `values`.",
+    "solution": "def most_common(arr):\n    values, counts = np.unique(arr, return_counts=True)\n    return values[counts.argmax()]\n"
+  },
+  "m4-4.2": {
+    "localId": "4.2",
+    "title": "Values seen exactly once",
+    "problem": "Write `singletons(arr)` that returns, sorted, the values in a 1-D array\nthat occur **exactly once**.",
+    "stub": "def singletons(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = singletons(np.array([1, 2, 2, 3, 4, 4, 4, 5]))\nprint(\"singletons(np.array([1, 2, 2, 3, 4, 4, 4, 5])) ->\")\nprint(result)\n\nexpected = np.array([1, 3, 5])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Get `(values, counts)` from `np.unique(..., return_counts=True)`, then boolean-index `values` with `counts == 1`.",
+    "solution": "def singletons(arr):\n    values, counts = np.unique(arr, return_counts=True)\n    return values[counts == 1]\n"
+  },
+  "m4-5.1": {
+    "localId": "5.1",
+    "title": "Temperature report",
+    "problem": "Write `temperature_report(temps, threshold)` that takes the 1-D array of\ndaily temperatures and a `threshold` value, and returns a dict with:\n\n- `\"hottest_day\"`: the **1-based** day number (int) with the highest temp\n  (day 1 = `temps[0]`)\n- `\"coldest_day\"`: the 1-based day number (int) with the lowest temp\n- `\"mean\"`: the mean temperature (float)\n- `\"std\"`: the standard deviation (float)\n- `\"days_above_threshold\"`: how many days exceeded `threshold` (int)\n- `\"sorted_desc\"`: the temperatures sorted from hottest to coldest (array)\n\nUse `argmax`/`argmin`, `mean`/`std`, boolean indexing + `.sum()` (or\n`np.count_nonzero`), and `np.sort` — don't write a loop.",
+    "stub": "def temperature_report(temps, threshold):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "temps_demo = np.array([10.0, 25.0, 5.0, 18.0, 20.0])\nresult = temperature_report(temps_demo, threshold=19.0)\nprint(\"temperature_report(temps_demo, threshold=19.0) ->\")\nprint(result)\n\nexpected = {\n    \"hottest_day\": 2,\n    \"coldest_day\": 3,\n    \"mean\": float(temps_demo.mean()),\n    \"std\": float(temps_demo.std()),\n    \"days_above_threshold\": 2,\n    \"sorted_desc\": np.array([25.0, 20.0, 18.0, 10.0, 5.0]),\n}\n_passed = (\n    isinstance(result, dict)\n    and result.get(\"hottest_day\") == expected[\"hottest_day\"]\n    and result.get(\"coldest_day\") == expected[\"coldest_day\"]\n    and np.isclose(result.get(\"mean\", np.nan), expected[\"mean\"])\n    and np.isclose(result.get(\"std\", np.nan), expected[\"std\"])\n    and result.get(\"days_above_threshold\") == expected[\"days_above_threshold\"]\n    and np.array_equal(result.get(\"sorted_desc\"), expected[\"sorted_desc\"])\n)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`temps.argmax()` is a 0-based flat index — add 1 to get the day number. `(temps > threshold).sum()` counts how many exceed the threshold. `np.sort(temps)[::-1]` sorts hottest-first.",
+    "solution": "def temperature_report(temps, threshold):\n    return {\n        \"hottest_day\": int(temps.argmax()) + 1,\n        \"coldest_day\": int(temps.argmin()) + 1,\n        \"mean\": float(temps.mean()),\n        \"std\": float(temps.std()),\n        \"days_above_threshold\": int((temps > threshold).sum()),\n        \"sorted_desc\": np.sort(temps)[::-1],\n    }\n"
+  },
+  "m5-1.1": {
+    "localId": "1.1",
+    "title": "Unit vector",
+    "problem": "Write `to_unit_vector(v)` that returns `v` scaled to have length (norm)\nexactly `1`, pointing in the same direction. Use `np.linalg.norm`.",
+    "stub": "def to_unit_vector(v):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = to_unit_vector(np.array([3.0, 4.0]))\nprint(\"to_unit_vector(np.array([3.0, 4.0])) ->\")\nprint(result)\n\nexpected = np.array([0.6, 0.8])\n_passed = np.allclose(np.linalg.norm(result), 1.0) and np.allclose(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Divide `v` by `np.linalg.norm(v)`.",
+    "solution": "def to_unit_vector(v):\n    return v / np.linalg.norm(v)\n"
+  },
+  "m5-1.2": {
+    "localId": "1.2",
+    "title": "Cosine similarity",
+    "problem": "Write `cosine_similarity(a, b)` that returns the cosine similarity between\ntwo 1-D vectors, as defined above.",
+    "stub": "def cosine_similarity(a, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "same_dir = cosine_similarity(np.array([1.0, 0.0]), np.array([5.0, 0.0]))\nprint(\"cosine_similarity([1, 0], [5, 0]) ->\")\nprint(same_dir)\n\northogonal = cosine_similarity(np.array([1.0, 0.0]), np.array([0.0, 1.0]))\nopposite = cosine_similarity(np.array([1.0, 0.0]), np.array([-1.0, 0.0]))\nprint(\"cosine_similarity([1, 0], [0, 1]) ->\", orthogonal)\nprint(\"cosine_similarity([1, 0], [-1, 0]) ->\", opposite)\n\n_passed = (\n    np.allclose(same_dir, 1.0)\n    and np.allclose(orthogonal, 0.0)\n    and np.allclose(opposite, -1.0)\n)\n\nif not _passed:\n    print()\n    print(\"Expected: 1.0, 0.0, and -1.0 respectively\")\n",
+    "hint": "`(a @ b) / (np.linalg.norm(a) * np.linalg.norm(b))` — just transcribe the formula above.",
+    "solution": "def cosine_similarity(a, b):\n    return (a @ b) / (np.linalg.norm(a) * np.linalg.norm(b))\n"
+  },
+  "m5-2.1": {
+    "localId": "2.1",
+    "title": "Weighted row sums",
+    "problem": "Write `weighted_sums(matrix, weights)` that takes a `(m, n)` matrix and a\nlength-`n` `weights` vector, and returns a length-`m` vector where each\nentry is the weighted sum of the corresponding row. Use a single matrix\nmultiplication — no loop.",
+    "stub": "def weighted_sums(matrix, weights):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "m = np.array([[1, 2, 3], [4, 5, 6]])\nw = np.array([1, 0, 1])\nresult = weighted_sums(m, w)\nprint(\"weighted_sums(matrix, weights) ->\")\nprint(result)\n\nexpected = np.array([4, 10])\n_passed = np.allclose(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "`matrix @ weights` does exactly this: a `(m, n) @ (n,)` product gives a length-`m` vector.",
+    "solution": "def weighted_sums(matrix, weights):\n    return matrix @ weights\n"
+  },
+  "m5-2.2": {
+    "localId": "2.2",
+    "title": "Matmul vs. Hadamard",
+    "problem": "Write `both_products(A, B)` that takes two same-shape square matrices and\nreturns a tuple `(matmul_result, hadamard_result)`: the true matrix product\n`A @ B` and the elementwise product `A * B`.",
+    "stub": "def both_products(A, B):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "A = np.array([[1, 2], [3, 4]])\nB = np.array([[5, 6], [7, 8]])\nmatmul_result, hadamard_result = both_products(A, B)\nprint(\"both_products(A, B) ->\")\nprint(\"matmul:  \", matmul_result.tolist())\nprint(\"hadamard:\", hadamard_result.tolist())\n\nexpected_matmul = A @ B\nexpected_hadamard = A * B\n_passed = (\n    np.array_equal(matmul_result, expected_matmul)\n    and np.array_equal(hadamard_result, expected_hadamard)\n    and not np.array_equal(matmul_result, hadamard_result)\n)\n\nif not _passed:\n    print()\n    print(\"Expected matmul:  \", expected_matmul.tolist())\n    print(\"Expected hadamard:\", expected_hadamard.tolist())\n",
+    "hint": "Literally return `(A @ B, A * B)`.",
+    "solution": "def both_products(A, B):\n    return A @ B, A * B\n"
+  },
+  "m5-3.1": {
+    "localId": "3.1",
+    "title": "Solve or report singular",
+    "problem": "Write `solve_or_none(A, b)` that returns the solution vector `x` to\n`Ax = b` using `np.linalg.solve`, or returns `None` if `A` is singular.\nCatch `LinAlgError` — but also treat a result containing `nan`/`inf` as\nsingular: depending on the exact LAPACK build, `np.linalg.solve` doesn't\nalways *raise* for a singular matrix, it sometimes just returns garbage\nvalues instead, so a robust solution checks both.",
+    "stub": "def solve_or_none(A, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "A = np.array([[3.0, 1.0], [1.0, 2.0]])\nb = np.array([9.0, 8.0])\nresult = solve_or_none(A, b)\nprint(\"solve_or_none(A, b) ->\")\nprint(result)\n\nok_basic = result is not None and np.allclose(A @ result, b)\n\nsingular = np.array([[1.0, 2.0], [2.0, 4.0]])\nsingular_result = solve_or_none(singular, np.array([1.0, 2.0]))\nprint()\nprint(\"solve_or_none(singular_matrix, b) ->\", singular_result)\n\n_passed = ok_basic and singular_result is None\n\nif not _passed:\n    print()\n    print(\"Expected: a vector x with A @ x ≈ b for the first call, and None for the singular matrix\")\n",
+    "hint": "Wrap `np.linalg.solve(A, b)` in a `try/except np.linalg.LinAlgError` and return `None` in the `except` branch — then also check `np.all(np.isfinite(x))` on whatever it returns, since a singular matrix doesn't always raise.",
+    "solution": "def solve_or_none(A, b):\n    try:\n        x = np.linalg.solve(A, b)\n    except np.linalg.LinAlgError:\n        return None\n    return x if np.all(np.isfinite(x)) else None\n"
+  },
+  "m5-3.2": {
+    "localId": "3.2",
+    "title": "Is it singular?",
+    "problem": "Write `is_singular(A, tol=1e-10)` that returns `True` if the square matrix\n`A` is singular (its determinant is within `tol` of zero), `False`\notherwise.",
+    "stub": "def is_singular(A, tol=1e-10):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result_1 = is_singular(np.array([[1.0, 2.0], [2.0, 4.0]]))\nresult_2 = is_singular(np.array([[3.0, 1.0], [1.0, 2.0]]))\nprint(\"is_singular(singular_matrix) ->\", result_1)\nprint(\"is_singular(regular_matrix)  ->\", result_2)\n\n_passed = bool(result_1) and not bool(result_2)\n\nif not _passed:\n    print()\n    print(\"Expected: True for the singular matrix, False for the regular one\")\n",
+    "hint": "Compute `np.linalg.det(A)` and compare `abs(det)` against `tol`.",
+    "solution": "def is_singular(A, tol=1e-10):\n    return abs(np.linalg.det(A)) < tol\n"
+  },
+  "m5-4.1": {
+    "localId": "4.1",
+    "title": "Verify an eigenpair",
+    "problem": "Write `is_eigenpair(A, v, lam, tol=1e-8)` that returns `True` if\n`A @ v` is within `tol` of `lam * v` (elementwise, via `np.allclose`),\n`False` otherwise.",
+    "stub": "def is_eigenpair(A, v, lam, tol=1e-8):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "A = np.array([[2.0, 0.0], [0.0, 3.0]])\neigenvalues, eigenvectors = np.linalg.eig(A)\n\nresult_1 = is_eigenpair(A, eigenvectors[:, 0], eigenvalues[0])\nprint(\"is_eigenpair(A, eigenvectors[:, 0], eigenvalues[0]) ->\")\nprint(result_1)\n\nresult_2 = is_eigenpair(A, eigenvectors[:, 1], eigenvalues[1])\nresult_3 = is_eigenpair(A, eigenvectors[:, 0], eigenvalues[1])\nprint(\"is_eigenpair(A, eigenvectors[:, 1], eigenvalues[1]) ->\", result_2)\nprint(\"is_eigenpair(A, eigenvectors[:, 0], eigenvalues[1]) (mismatched) ->\", result_3)\n\n_passed = bool(result_1) and bool(result_2) and not result_3\n\nif not _passed:\n    print()\n    print(\"Expected: True, True, False\")\n",
+    "hint": "`np.allclose(A @ v, lam * v, atol=tol)`.",
+    "solution": "def is_eigenpair(A, v, lam, tol=1e-8):\n    return np.allclose(A @ v, lam * v, atol=tol)\n"
+  },
+  "m5-4.2": {
+    "localId": "4.2",
+    "title": "Dominant eigenvalue",
+    "problem": "Write `dominant_eigenvalue(A)` that returns the eigenvalue of `A` with the\nlargest absolute value, as a real float (eigenvalues from `np.linalg.eig`\ncome back as complex numbers even when the imaginary part is zero — use\n`.real` after picking the right one, or take `abs()` for comparison and\nreturn the original real part).",
+    "stub": "def dominant_eigenvalue(A):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "A = np.array([[2.0, 0.0], [0.0, 3.0]])\nresult = dominant_eigenvalue(A)\nprint(\"dominant_eigenvalue(A) ->\")\nprint(result)\n\nexpected = 3.0\n_passed = np.allclose(result, expected) and (isinstance(result, float) or np.isrealobj(result))\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "Get `eigenvalues` from `np.linalg.eig(A)`, use `np.argmax(np.abs(eigenvalues))` to find the index of the largest-magnitude one, then take `.real`.",
+    "solution": "def dominant_eigenvalue(A):\n    eigenvalues, _ = np.linalg.eig(A)\n    idx = np.argmax(np.abs(eigenvalues))\n    return eigenvalues[idx].real\n"
+  },
+  "m5-5.1": {
+    "localId": "5.1",
+    "title": "Reproducible dice rolls",
+    "problem": "Write `roll_dice(n_rolls, seed)` that returns an array of `n_rolls`\nsimulated six-sided die rolls (integers `1`-`6` inclusive), using\n`np.random.default_rng(seed)`. The same `seed` must always produce the\nsame sequence.",
+    "stub": "def roll_dice(n_rolls, seed):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "rolls = roll_dice(1000, seed=1)\nprint(\"roll_dice(1000, seed=1) -> (first 20 of 1000)\")\nprint(rolls[:20])\n\nok_shape = rolls.shape == (1000,)\nok_range = rolls.min() >= 1 and rolls.max() <= 6\nok_reproducible = np.array_equal(roll_dice(10, seed=5), roll_dice(10, seed=5))\n\n_passed = ok_shape and ok_range and ok_reproducible\n\nif not _passed:\n    print()\n    print(\"Expected: shape (1000,), every value in 1..6, and the same seed always giving the same rolls\")\n    print(f\"(shape={rolls.shape}, min={rolls.min()}, max={rolls.max()}, reproducible={ok_reproducible})\")\n",
+    "hint": "`np.random.default_rng(seed).integers(1, 7, size=n_rolls)` — remember `integers`'s upper bound is exclusive, so use `7` to include `6`.",
+    "solution": "def roll_dice(n_rolls, seed):\n    rng = np.random.default_rng(seed)\n    return rng.integers(1, 7, size=n_rolls)\n"
+  },
+  "m5-5.2": {
+    "localId": "5.2",
+    "title": "Shuffle without replacement",
+    "problem": "Write `random_sample_no_replace(arr, k, seed)` that returns `k` elements\nrandomly chosen from `arr` *without* replacement (no duplicates), using\n`rng.choice` with the right arguments.",
+    "stub": "def random_sample_no_replace(arr, k, seed):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "arr = np.arange(20)\nresult = random_sample_no_replace(arr, 5, seed=3)\nprint(\"random_sample_no_replace(np.arange(20), 5, seed=3) ->\")\nprint(result)\n\nok_shape = result.shape == (5,)\nok_unique = len(set(result.tolist())) == 5\nok_subset = np.all(np.isin(result, arr))\n\n_passed = ok_shape and ok_unique and ok_subset\n\nif not _passed:\n    print()\n    print(\"Expected: 5 unique values, all drawn from the original array\")\n    print(f\"(shape={result.shape}, unique={ok_unique}, subset={ok_subset})\")\n",
+    "hint": "`np.random.default_rng(seed).choice(arr, size=k, replace=False)`.",
+    "solution": "def random_sample_no_replace(arr, k, seed):\n    rng = np.random.default_rng(seed)\n    return rng.choice(arr, size=k, replace=False)\n"
+  },
+  "m5-6.1": {
+    "localId": "6.1",
+    "title": "estimate_pi(n_samples, seed)",
+    "problem": "Write `estimate_pi(n_samples, seed)` that runs the Monte Carlo procedure\nabove: sample `n_samples` uniform `(x, y)` points in `[-1, 1] x [-1, 1]`\nusing `np.random.default_rng(seed)`, and return `4 * (fraction of points\nwith x**2 + y**2 <= 1)` as a float. Use vectorized operations only — no\nPython loop over the samples.",
+    "stub": "def estimate_pi(n_samples, seed):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "# With 200,000 samples and this fixed seed, the estimate is reliably\n# within 0.02 of the true value — verified when writing this check.\nresult = estimate_pi(200_000, seed=42)\nprint(\"estimate_pi(200_000, seed=42) ->\")\nprint(result)\nprint(\"true pi:\", np.pi)\n\nok_close = abs(result - np.pi) < 0.02\nok_reproducible = estimate_pi(1000, seed=1) == estimate_pi(1000, seed=1)\n\n_passed = ok_close and ok_reproducible\n\nif not _passed:\n    print()\n    print(f\"Expected: a value within 0.02 of {np.pi}, and the same seed always giving the same estimate\")\n",
+    "hint": "Reuse the exact pattern from the example above: `rng.uniform(-1, 1, size=n_samples)` for `x` and `y`, build the `inside` mask, return `4 * inside.mean()`.",
+    "solution": "def estimate_pi(n_samples, seed):\n    rng = np.random.default_rng(seed)\n    x = rng.uniform(-1, 1, size=n_samples)\n    y = rng.uniform(-1, 1, size=n_samples)\n    inside = x**2 + y**2 <= 1\n    return 4 * inside.mean()\n"
+  },
+  "m6-1.1": {
+    "localId": "1.1",
+    "title": "Spot the view",
+    "problem": "Write `second_row_view(matrix)` that returns a **view** (not a copy) of row\nindex `1` of a 2-D array, using basic slicing.",
+    "stub": "def second_row_view(matrix):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "m = np.arange(12).reshape(3, 4)\nresult = second_row_view(m)\nprint(\"second_row_view(m) ->\")\nprint(result)\n\nshares_memory = np.shares_memory(result, m)\nprint()\nprint(\"np.shares_memory(result, m) ->\", shares_memory)\n\nexpected = np.array([4, 5, 6, 7])\n_passed = np.array_equal(result, expected) and shares_memory\n\nif _passed:\n    result[0] = 999\n    _passed = bool(m[1, 0] == 999)\n\nif not _passed:\n    print()\n    print(\"Expected: a VIEW (shares memory with m) equal to\", expected,\n          \"— and mutating it should mutate m too\")\n",
+    "hint": "Plain slicing with `matrix[1]` (or `matrix[1, :]`) already returns a view — no `.copy()` needed.",
+    "solution": "def second_row_view(matrix):\n    return matrix[1]\n"
+  },
+  "m6-1.2": {
+    "localId": "1.2",
+    "title": "Force a contiguous copy",
+    "problem": "Write `ensure_contiguous(arr)` that returns a C-contiguous version of\n`arr`. If `arr` is already C-contiguous, return it unchanged (same\nunderlying buffer); otherwise return a new, C-contiguous array with the\nsame shape and values.",
+    "stub": "def ensure_contiguous(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "base = np.arange(6).reshape(2, 3)\nsame = ensure_contiguous(base)\nprint(\"ensure_contiguous(base) ->\")\nprint(same)\n\nalready_contiguous_ok = np.shares_memory(same, base)\nprint()\nprint(\"np.shares_memory(result, base) (already contiguous, should be True) ->\", already_contiguous_ok)\n\ntransposed = base.T\nfixed = ensure_contiguous(transposed)\nprint()\nprint(\"ensure_contiguous(base.T) ->\")\nprint(fixed)\nprint(\"is C-contiguous:\", fixed.flags[\"C_CONTIGUOUS\"])\n\n_passed = (\n    already_contiguous_ok\n    and fixed.flags[\"C_CONTIGUOUS\"]\n    and np.array_equal(fixed, transposed)\n)\n\nif not _passed:\n    print()\n    print(\"Expected: base returned as-is (same memory), and a C-contiguous \"\n          \"copy of base.T with the same values as:\")\n    print(transposed)\n",
+    "hint": "`np.ascontiguousarray` does exactly this: no-op copy if already contiguous, real copy otherwise.",
+    "solution": "def ensure_contiguous(arr):\n    return np.ascontiguousarray(arr)\n"
+  },
+  "m6-2.1": {
+    "localId": "2.1",
+    "title": "Increment in place",
+    "problem": "Write `increment_in_place(arr, amount)` that adds `amount` to every\nelement of `arr` **in place** (using the `out=` parameter so no new array\nis allocated) and returns `arr` itself.",
+    "stub": "def increment_in_place(arr, amount):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "original = np.array([1.0, 2.0, 3.0])\nresult = increment_in_place(original, 5.0)\nprint(\"increment_in_place(np.array([1.0, 2.0, 3.0]), 5.0) ->\")\nprint(result)\n\nsame_object = result is original\nprint()\nprint(\"result is original (must be mutated in place) ->\", same_object)\n\nexpected = np.array([6.0, 7.0, 8.0])\n_passed = same_object and np.allclose(original, expected)\n\nif not _passed:\n    print()\n    print(\"Expected: the SAME array object, mutated in place to\", expected)\n",
+    "hint": "`np.add(arr, amount, out=arr)` writes the result back into `arr` and also returns `arr`.",
+    "solution": "def increment_in_place(arr, amount):\n    return np.add(arr, amount, out=arr)\n"
+  },
+  "m6-2.2": {
+    "localId": "2.2",
+    "title": "Running totals, no loop",
+    "problem": "Write `running_totals(values)` that returns the cumulative sum of a 1-D\narray (`result[i]` = sum of `values[0..i]`) without writing a Python `for`\nor `while` loop.",
+    "stub": "def running_totals(values):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = running_totals(np.array([1, 2, 3, 4]))\nprint(\"running_totals(np.array([1, 2, 3, 4])) ->\")\nprint(result)\n\nexpected = np.array([1, 3, 6, 10])\n_passed = np.array_equal(result, expected)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print(expected)\n",
+    "hint": "There's a single built-in NumPy function that does exactly this: `np.cumsum`.",
+    "solution": "def running_totals(values):\n    return np.cumsum(values)\n"
+  },
+  "m6-3.1": {
+    "localId": "3.1",
+    "title": "Round-trip a single array",
+    "problem": "Write `roundtrip_npy(arr)` that writes `arr` to an in-memory `io.BytesIO`\nbuffer with `np.save`, reads it back with `np.load`, and returns the\nloaded array.",
+    "stub": "def roundtrip_npy(arr):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "original = np.array([3.5, -1.0, 2.25])\nresult = roundtrip_npy(original)\nprint(\"roundtrip_npy(np.array([3.5, -1.0, 2.25])) ->\")\nprint(result)\n\n_passed = np.allclose(result, original) and result is not original\n\nif not _passed:\n    print()\n    print(\"Expected: a freshly loaded array (not the same object), equal to\", original)\n",
+    "hint": "`buf = io.BytesIO()`, then `np.save(buf, arr)`, then `buf.seek(0)` before `np.load(buf)`.",
+    "solution": "def roundtrip_npy(arr):\n    buf = io.BytesIO()\n    np.save(buf, arr)\n    buf.seek(0)\n    return np.load(buf)\n"
+  },
+  "m6-3.2": {
+    "localId": "3.2",
+    "title": "Round-trip two named arrays",
+    "problem": "Write `roundtrip_npz(a, b)` that saves `a` and `b` into one in-memory\n`.npz` archive under the keys `\"a\"` and `\"b\"` with `np.savez`, reloads it,\nand returns a plain `dict` `{\"a\": ..., \"b\": ...}` of the loaded arrays.",
+    "stub": "def roundtrip_npz(a, b):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "a = np.array([1, 2, 3])\nb = np.array([[1, 2], [3, 4]])\nresult = roundtrip_npz(a, b)\nprint(\"roundtrip_npz(a, b) ->\")\nprint(result)\n\n_passed = (\n    isinstance(result, dict)\n    and set(result.keys()) == {\"a\", \"b\"}\n    and np.array_equal(result.get(\"a\"), a)\n    and np.array_equal(result.get(\"b\"), b)\n)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print({\"a\": a, \"b\": b})\n",
+    "hint": "`np.savez(buf, a=a, b=b)`, `buf.seek(0)`, then `np.load(buf)` returns an `NpzFile` — index it with `[\"a\"]` and `[\"b\"]`.",
+    "solution": "def roundtrip_npz(a, b):\n    buf = io.BytesIO()\n    np.savez(buf, a=a, b=b)\n    buf.seek(0)\n    archive = np.load(buf)\n    return {\"a\": archive[\"a\"], \"b\": archive[\"b\"]}\n"
+  },
+  "m6-4.1": {
+    "localId": "4.1",
+    "title": "Build a structured array",
+    "problem": "Write `make_people(names, ages, scores)` that takes three equal-length\nsequences and returns a structured array with dtype\n`[(\"name\", \"U10\"), (\"age\", \"i4\"), (\"score\", \"f8\")]`, one record per\ninput triple.",
+    "stub": "def make_people(names, ages, scores):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "result = make_people([\"Ana\", \"Boris\"], [34, 29], [91.5, 88.0])\nprint('make_people([\"Ana\", \"Boris\"], [34, 29], [91.5, 88.0]) ->')\nprint(result)\n\n_passed = (\n    result.dtype.names == (\"name\", \"age\", \"score\")\n    and result[0][\"name\"] == \"Ana\"\n    and result[0][\"age\"] == 34\n    and np.isclose(result[1][\"score\"], 88.0)\n)\n\nif not _passed:\n    print()\n    print('Expected: a structured array with fields (\"name\", \"age\", \"score\"), '\n          'first record name \"Ana\"/age 34, second record score ≈ 88.0')\n",
+    "hint": "Zip the three sequences into a list of tuples, then pass that list and the dtype straight to `np.array(...)`.",
+    "solution": "def make_people(names, ages, scores):\n    dtype = np.dtype([(\"name\", \"U10\"), (\"age\", \"i4\"), (\"score\", \"f8\")])\n    records = list(zip(names, ages, scores))\n    return np.array(records, dtype=dtype)\n"
+  },
+  "m6-4.2": {
+    "localId": "4.2",
+    "title": "Sort by score",
+    "problem": "Write `sort_by_score(people)` that takes a structured array with a\n`\"score\"` field and returns it sorted in **ascending** order by that\nfield.",
+    "stub": "def sort_by_score(people):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "dtype = np.dtype([(\"name\", \"U10\"), (\"age\", \"i4\"), (\"score\", \"f8\")])\npeople = np.array(\n    [(\"Ana\", 34, 91.5), (\"Boris\", 29, 88.0), (\"Chiko\", 41, 95.25)],\n    dtype=dtype,\n)\nresult = sort_by_score(people)\nprint(\"sort_by_score(people) ->\")\nprint(result)\n\nexpected_names = [\"Boris\", \"Ana\", \"Chiko\"]\n_passed = list(result[\"name\"]) == expected_names and np.all(np.diff(result[\"score\"]) >= 0)\n\nif not _passed:\n    print()\n    print(\"Expected names in ascending-score order:\", expected_names)\n",
+    "hint": "`np.sort` takes an `order=` keyword for structured arrays — `np.sort(people, order=\"score\")`.",
+    "solution": "def sort_by_score(people):\n    return np.sort(people, order=\"score\")\n"
+  },
+  "m6-5.1": {
+    "localId": "5.1",
+    "title": "Threshold, crop, and measure brightness",
+    "problem": "Write `analyze_image(img, threshold, crop_slice)` that performs three\nchained steps on a 2-D grayscale array `img`:\n\n1. Build a boolean `\"mask\"` the same shape as `img` where pixels are\n   strictly greater than `threshold`.\n2. Build a `\"crop\"`: the sub-array `img[crop_slice]`, where `crop_slice`\n   is a tuple of two `slice` objects (one per axis) — e.g.\n   `(slice(0, 10), slice(0, 10))`.\n3. Compute `\"bright_fraction\"`: the fraction (a Python `float` between 0\n   and 1) of pixels **within that crop** that are strictly greater than\n   `threshold`.\n\nReturn a dict with exactly the keys `\"mask\"`, `\"crop\"`, and\n`\"bright_fraction\"`.",
+    "stub": "def analyze_image(img, threshold, crop_slice):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "test_img = np.array([\n    [10, 10, 200, 200],\n    [10, 10, 200, 200],\n    [5,  5,  5,   5],\n    [5,  5,  5,   5],\n])\ncrop_slice = (slice(0, 2), slice(0, 4))\nresult = analyze_image(test_img, 100, crop_slice)\nprint(\"analyze_image(test_img, 100, crop_slice) ->\")\nprint(result)\n\nexpected_mask = test_img > 100\nexpected_crop = test_img[crop_slice]\nexpected_fraction = 0.5  # 4 of 8 crop pixels are 200\n\n_passed = (\n    isinstance(result, dict)\n    and set(result.keys()) == {\"mask\", \"crop\", \"bright_fraction\"}\n    and result[\"mask\"].shape == test_img.shape\n    and result[\"mask\"].dtype == bool\n    and np.array_equal(result[\"mask\"], expected_mask)\n    and np.array_equal(result[\"crop\"], expected_crop)\n    and np.isclose(result[\"bright_fraction\"], expected_fraction)\n)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print({\"mask\": expected_mask, \"crop\": expected_crop, \"bright_fraction\": expected_fraction})\n",
+    "hint": "`mask = img > threshold`. `crop = img[crop_slice]`. For the fraction, reuse the mask but computed on the crop (or slice the mask itself with `crop_slice`) and take `.mean()` of the boolean array — the mean of a boolean array IS the fraction of `True` values.",
+    "solution": "def analyze_image(img, threshold, crop_slice):\n    mask = img > threshold\n    crop = img[crop_slice]\n    bright_fraction = float((crop > threshold).mean())\n    return {\"mask\": mask, \"crop\": crop, \"bright_fraction\": bright_fraction}\n"
+  },
+  "m6-6.1": {
+    "localId": "6.1",
+    "title": "Returns, worst day, and a rolling mean",
+    "problem": "Write `analyze_prices(prices, window)` that performs three chained\ncomputations on a 1-D array of daily closing prices:\n\n1. `\"daily_returns\"`: a vectorized array of length `len(prices) - 1` where\n   `daily_returns[i] = prices[i+1] / prices[i] - 1` (no Python loop).\n2. `\"worst_day_index\"` and `\"worst_day_return\"`: the index into\n   `daily_returns` of the single worst (most negative) daily return, and\n   that return's value.\n3. `\"rolling_mean\"`: the simple moving average of `prices` over `window`\n   days, computed with `np.convolve` and `mode=\"valid\"` as described above\n   (length `len(prices) - window + 1`).\n\nReturn a dict with exactly the keys `\"daily_returns\"`, `\"worst_day_index\"`,\n`\"worst_day_return\"`, and `\"rolling_mean\"`.",
+    "stub": "def analyze_prices(prices, window):\n    # YOUR CODE HERE\n    raise NotImplementedError\n",
+    "check": "prices = np.array([100.0, 102.0, 101.0, 95.0, 105.0, 107.0])\nresult = analyze_prices(prices, window=3)\nprint(\"analyze_prices(prices, window=3) ->\")\nprint(result)\n\nexpected_returns = prices[1:] / prices[:-1] - 1\nexpected_worst_idx = int(np.argmin(expected_returns))\nexpected_worst_return = expected_returns[expected_worst_idx]\nkernel = np.ones(3) / 3\nexpected_rolling = np.convolve(prices, kernel, mode=\"valid\")\n\n_passed = (\n    isinstance(result, dict)\n    and set(result.keys()) == {\n        \"daily_returns\", \"worst_day_index\", \"worst_day_return\", \"rolling_mean\"\n    }\n    and np.allclose(result[\"daily_returns\"], expected_returns)\n    and result[\"worst_day_index\"] == expected_worst_idx\n    and np.isclose(result[\"worst_day_return\"], expected_worst_return)\n    and np.allclose(result[\"rolling_mean\"], expected_rolling)\n    and len(result[\"rolling_mean\"]) == len(prices) - 3 + 1\n)\n\nif not _passed:\n    print()\n    print(\"Expected:\")\n    print({\n        \"daily_returns\": expected_returns,\n        \"worst_day_index\": expected_worst_idx,\n        \"worst_day_return\": expected_worst_return,\n        \"rolling_mean\": expected_rolling,\n    })\n",
+    "hint": "`daily_returns = prices[1:] / prices[:-1] - 1`. Use `np.argmin` for the worst index, then index back into `daily_returns` for its value. For the rolling mean, build `kernel = np.ones(window) / window` and call `np.convolve(prices, kernel, mode=\"valid\")`.",
+    "solution": "def analyze_prices(prices, window):\n    daily_returns = prices[1:] / prices[:-1] - 1\n    worst_day_index = int(np.argmin(daily_returns))\n    worst_day_return = float(daily_returns[worst_day_index])\n    kernel = np.ones(window) / window\n    rolling_mean = np.convolve(prices, kernel, mode=\"valid\")\n    return {\n        \"daily_returns\": daily_returns,\n        \"worst_day_index\": worst_day_index,\n        \"worst_day_return\": worst_day_return,\n        \"rolling_mean\": rolling_mean,\n    }\n"
+  }
+}

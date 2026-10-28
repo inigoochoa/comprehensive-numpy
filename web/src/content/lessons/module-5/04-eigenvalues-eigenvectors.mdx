@@ -1,0 +1,63 @@
+---
+title: Eigenvalues & Eigenvectors
+module: 5
+moduleTitle: Linear Algebra & Random
+lessonNumber: 4
+order: 504
+notebookFile: module_5_linalg_random.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m5-4.1
+- m5-4.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+For a square matrix `A`, an **eigenvector** `v` is a (nonzero) vector whose
+direction doesn't change when `A` is applied to it — only its length
+scales, by a factor called the **eigenvalue** `λ`:
+
+```
+A @ v == λ * v
+```
+
+`np.linalg.eig(A)` returns `(eigenvalues, eigenvectors)`, where
+`eigenvectors[:, i]` is the eigenvector for `eigenvalues[i]`.
+
+For non-square matrices there's no eigendecomposition, but there is an
+analogous, even more general tool: the **Singular Value Decomposition**
+(`np.linalg.svd`), which factors *any* matrix into rotation/scaling
+components — useful for things like dimensionality reduction, but outside
+the scope of this lesson's exercises.
+
+```python
+A = np.array([[2.0, 0.0], [0.0, 3.0]])
+eigenvalues, eigenvectors = np.linalg.eig(A)
+print("eigenvalues: ", eigenvalues)
+print("eigenvectors:\n", eigenvectors)
+
+v0 = eigenvectors[:, 0]
+lam0 = eigenvalues[0]
+print("A @ v0:   ", A @ v0)
+print("lam0 * v0:", lam0 * v0)
+print("match:", np.allclose(A @ v0, lam0 * v0))
+```
+
+**Output:**
+
+```text
+eigenvalues:  [2. 3.]
+eigenvectors:
+ [[1. 0.]
+ [0. 1.]]
+A @ v0:    [2. 0.]
+lam0 * v0: [2. 0.]
+match: True
+```
+
+<Exercise id="m5-4.1" client:visible />
+
+<Exercise id="m5-4.2" client:visible />
+

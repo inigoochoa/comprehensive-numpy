@@ -1,0 +1,57 @@
+---
+title: Saving & Loading Arrays
+module: 6
+moduleTitle: Performance, I/O & Mini-Projects
+lessonNumber: 3
+order: 603
+notebookFile: module_6_performance_projects.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m6-3.1
+- m6-3.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+- `np.save` / `np.load` write a **single** array to a binary `.npy` file.
+- `np.savez` / `np.load` write **several named** arrays to one `.npz`
+  archive (loading returns an `NpzFile` you index like a dict).
+- `np.savetxt` / `np.loadtxt` write a plain-text, CSV-like format — human
+  readable, but slower and loses exact dtype information.
+
+All three normally take a file path, but they're equally happy with an
+in-memory file-like object (`io.BytesIO` for the binary formats,
+`io.StringIO` for text) — handy for round-tripping without touching disk,
+which is exactly what the exercises below do. **Remember to `seek(0)`** on
+the buffer after writing and before reading, since writing leaves the
+buffer's position at the end.
+
+```python
+arr = np.array([1, 2, 3, 4])
+
+buf = io.BytesIO()
+np.save(buf, arr)
+buf.seek(0)
+loaded = np.load(buf)
+print("single array round-trip:", loaded)
+
+buf2 = io.BytesIO()
+np.savez(buf2, first=arr, second=arr * 10)
+buf2.seek(0)
+archive = np.load(buf2)
+print("multi-array round-trip:", archive["first"], archive["second"])
+```
+
+**Output:**
+
+```text
+single array round-trip: [1 2 3 4]
+multi-array round-trip: [1 2 3 4] [10 20 30 40]
+```
+
+<Exercise id="m6-3.1" client:visible />
+
+<Exercise id="m6-3.2" client:visible />
+

@@ -1,0 +1,92 @@
+---
+title: Broadcasting Rules
+module: 3
+moduleTitle: Array Operations & Broadcasting
+lessonNumber: 2
+order: 302
+notebookFile: module_3_operations_broadcasting.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m3-2.1
+- m3-2.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+Broadcasting lets NumPy combine arrays of *different* shapes without you
+copying data to make them match. The rule set, applied by comparing shapes
+from the **right**:
+
+1. If the two shapes have a different number of dimensions, pad the smaller
+   shape with `1`s on the **left** until they match.
+2. Two dimensions are compatible if they're equal, **or** one of them is `1`
+   (the size-1 dimension is stretched to match the other).
+3. If any pair of dimensions is neither equal nor `1`, broadcasting fails
+   with a `ValueError`.
+
+```python
+# (3,) + scalar -> scalar broadcasts to every element
+print(np.array([1, 2, 3]) + 10)
+
+# (3,1) + (1,4) -> (3,4): both arrays stretch along their size-1 axis
+col = np.array([[1], [2], [3]])        # shape (3, 1)
+row = np.array([[10, 20, 30, 40]])     # shape (1, 4)
+print(col + row)
+print((col + row).shape)
+```
+
+**Output:**
+
+```text
+[11 12 13]
+[[11 21 31 41]
+ [12 22 32 42]
+ [13 23 33 43]]
+(3, 4)
+```
+
+```python
+# A genuine mismatch: (3,) and (4,) share no size-1 dimension to stretch.
+try:
+    np.array([1, 2, 3]) + np.array([1, 2, 3, 4])
+except ValueError as e:
+    print("ValueError:", e)
+```
+
+**Output:**
+
+```text
+ValueError: operands could not be broadcast together with shapes (3,) (4,)
+```
+
+<Exercise id="m3-2.1" client:visible />
+
+A quick preview before this next exercise — Module 4 covers aggregations
+and the `axis` parameter in full, but you need one piece of it now:
+`matrix.mean(axis=1)` averages across axis 1 (the columns), collapsing each
+row down to a single number, so a `(3, 4)` matrix becomes a `(3,)` array of
+row means. Passing `keepdims=True` keeps that collapsed axis as a length-1
+dimension instead of dropping it — `(3, 1)` instead of `(3,)` — which is
+exactly what you need here, because a `(3, 1)` array broadcasts cleanly
+against the original `(3, 4)` matrix while a plain `(3,)` array doesn't.
+
+```python
+m = np.array([[1.0, 2.0, 3.0], [10.0, 20.0, 30.0]])
+print(m.mean(axis=1))                   # shape (2,)  -- can't broadcast against m
+print(m.mean(axis=1, keepdims=True))    # shape (2, 1) -- broadcasts against m
+print(m.mean(axis=1, keepdims=True).shape)
+```
+
+**Output:**
+
+```text
+[ 2. 20.]
+[[ 2.]
+ [20.]]
+(2, 1)
+```
+
+<Exercise id="m3-2.2" client:visible />
+

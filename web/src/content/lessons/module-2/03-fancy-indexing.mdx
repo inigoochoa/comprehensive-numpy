@@ -1,0 +1,50 @@
+---
+title: Fancy Indexing
+module: 2
+moduleTitle: Indexing, Slicing & Views
+lessonNumber: 3
+order: 203
+notebookFile: module_2_indexing_views.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m2-3.1
+- m2-3.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+"Fancy indexing" means indexing with an array (or list) of integers instead
+of a single index or a slice. It lets you pick out an arbitrary, possibly
+repeated, possibly reordered set of elements/rows/columns in one shot. You
+can combine a fancy index on one axis with a slice on another. Unlike basic
+slicing, **fancy indexing always returns a copy**, never a view.
+
+```python
+arr = np.array([10, 20, 30, 40, 50])
+print(arr[[0, 2, 4]])        # pick specific elements
+print(arr[[3, 3, 1]])        # repeats allowed, any order
+
+grid = np.arange(12).reshape(4, 3)
+print(grid[[0, 2]])          # rows 0 and 2
+print(grid[[0, 2], :2])      # rows 0 and 2, first two columns
+print(grid[[0, 1, 2], [0, 1, 2]])  # (0,0), (1,1), (2,2) -- paired coordinates!
+```
+
+**Output:**
+
+```text
+[10 30 50]
+[40 40 20]
+[[0 1 2]
+ [6 7 8]]
+[[0 1]
+ [6 7]]
+[0 4 8]
+```
+
+<Exercise id="m2-3.1" client:visible />
+
+<Exercise id="m2-3.2" client:visible />
+

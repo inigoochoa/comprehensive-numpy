@@ -1,0 +1,49 @@
+---
+title: Structured Arrays
+module: 6
+moduleTitle: Performance, I/O & Mini-Projects
+lessonNumber: 4
+order: 604
+notebookFile: module_6_performance_projects.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m6-4.1
+- m6-4.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+A **structured array** has a dtype made of named fields, so each element
+is a small fixed-layout record rather than a single number — useful for
+tabular data when you don't want to bring in `pandas`. Define the dtype
+with a list of `(field_name, field_dtype)` pairs, then index a field by
+name like a dict key. `np.sort(arr, order="field_name")` sorts the whole
+array by one field.
+
+```python
+dtype = np.dtype([("name", "U10"), ("age", "i4"), ("score", "f8")])
+people = np.array(
+    [("Ana", 34, 91.5), ("Boris", 29, 88.0), ("Chiko", 41, 95.25)],
+    dtype=dtype,
+)
+print(people["name"])
+print(people["score"])
+
+by_age = np.sort(people, order="age")
+print(by_age)
+```
+
+**Output:**
+
+```text
+['Ana' 'Boris' 'Chiko']
+[91.5  88.   95.25]
+[('Boris', 29, 88.  ) ('Ana', 34, 91.5 ) ('Chiko', 41, 95.25)]
+```
+
+<Exercise id="m6-4.1" client:visible />
+
+<Exercise id="m6-4.2" client:visible />
+

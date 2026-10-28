@@ -1,0 +1,35 @@
+---
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-sans/700.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = "A hands-on, self-paced NumPy course — read, run, and check real NumPy code right in the browser." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <ClientRouter />
+    <!--
+      Privacy-friendly analytics placeholder. This project ships with none
+      enabled by default — if you self-host Umami (https://umami.is), drop
+      your own <script> tag here with your instance URL + website id.
+    -->
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

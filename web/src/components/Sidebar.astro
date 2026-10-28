@@ -1,0 +1,76 @@
+---
+import toc from "../data/toc.json";
+
+interface Props {
+  currentSlug?: string; // e.g. "module-1/01-why-numpy-ndarray-vs-python-list"
+}
+const { currentSlug } = Astro.props;
+
+const totalExercises = (toc as any[]).reduce(
+  (sum, mod) => sum + mod.lessons.reduce((s: number, l: any) => s + l.exerciseIds.length, 0),
+  0
+);
+---
+
+<aside class="sidebar" id="course-sidebar">
+  <a href="/" class="sidebar__brand">Comprehensive NumPy</a>
+
+  <div class="sidebar__progress-track">
+    <div class="sidebar__progress-fill" id="progress-fill" style="width: 0%"></div>
+  </div>
+  <span class="sidebar__progress-label" id="progress-label" data-total={totalExercises}>
+    0 of {totalExercises} exercises completed
+  </span>
+
+  {(toc as any[]).map((mod) => (
+    <div class="sidebar__module">
+      <a href={`/module-${mod.module}/00-overview`} class="sidebar__module-title">
+        Module {mod.module} — {mod.title}
+      </a>
+      {mod.lessons.map((lesson: any) => {
+        const slug = `module-${mod.module}/${lesson.slug}`;
+        const isCurrent = slug === currentSlug;
+        return (
+          <a
+            href={`/${slug}`}
+            class="sidebar__lesson"
+            aria-current={isCurrent ? "page" : undefined}
+            data-exercise-ids={lesson.exerciseIds.join(",")}
+            data-done="false"
+          >
+            <span class="sidebar__dot"></span>
+            {lesson.number}. {lesson.title}
+          </a>
+        );
+      })}
+    </div>
+  ))}
+</aside>
+
+<script>
+  import { getCompletedCount, isLessonDone } from "../lib/progress";
+  import { PROGRESS_EVENT } from "../lib/progress";
+
+  function refresh() {
+    const total = Number(document.getElementById("progress-label")?.dataset.total ?? "0");
+    const done = getCompletedCount();
+    const fill = document.getElementById("progress-fill") as HTMLDivElement | null;
+    const label = document.getElementById("progress-label") as HTMLSpanElement | null;
+    if (fill) fill.style.width = total > 0 ? `${Math.round((done / total) * 100)}%` : "0%";
+    if (label) label.textContent = `${done} of ${total} exercises completed`;
+
+    document.querySelectorAll<HTMLAnchorElement>(".sidebar__lesson").forEach((el) => {
+      const ids = (el.dataset.exerciseIds ?? "").split(",").filter(Boolean);
+      el.dataset.done = String(isLessonDone(ids));
+    });
+  }
+
+  // With Astro's ClientRouter, navigating to another lesson swaps in a brand
+  // new sidebar DOM (server-rendered, so it knows nothing about localStorage)
+  // without a full page reload — this script's top-level code only runs once
+  // per physical page load, so without the astro:page-load listener the
+  // freshly-swapped sidebar would never pick up completed-exercise state.
+  refresh();
+  window.addEventListener(PROGRESS_EVENT, refresh);
+  document.addEventListener("astro:page-load", refresh);
+</script>

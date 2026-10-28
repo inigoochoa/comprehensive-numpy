@@ -1,0 +1,85 @@
+---
+title: Creating Arrays
+module: 1
+moduleTitle: Fundamentals & Array Creation
+lessonNumber: 2
+order: 102
+notebookFile: module_1_fundamentals.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m1-2.1
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+There are three common families of array-creation functions:
+
+| Family | Functions | Use case |
+|---|---|---|
+| From existing data | `np.array`, `np.asarray` | You already have a list/tuple of values |
+| Filled with a constant | `np.zeros`, `np.ones`, `np.full`, `np.eye` | You need a placeholder of a given shape |
+| Evenly spaced ranges | `np.arange`, `np.linspace` | You need a sequence of numbers |
+
+`np.arange(start, stop, step)` works like Python's `range` but returns an
+array and accepts floats. `np.linspace(start, stop, num)` instead fixes the
+**count** of points (inclusive of both ends by default), which is usually
+what you want for plotting.
+
+```python
+print(np.zeros((2, 3)))
+print()
+print(np.full((2, 2), fill_value=7))
+print()
+print(np.eye(3))
+print()
+print(np.arange(0, 10, 2))       # stop is exclusive
+print(np.linspace(0, 1, 5))      # stop is inclusive
+```
+
+**Output:**
+
+```text
+[[0. 0. 0.]
+ [0. 0. 0.]]
+
+[[7 7]
+ [7 7]]
+
+[[1. 0. 0.]
+ [0. 1. 0.]
+ [0. 0. 1.]]
+
+[0 2 4 6 8]
+[0.   0.25 0.5  0.75 1.  ]
+```
+
+A quick preview before the next exercise — Module 2 covers indexing and
+slicing in full depth, but you'll need a taste of it now. Slicing an array
+works just like slicing a Python list — `arr[start:stop:step]` — except it
+extends naturally to multiple axes by separating them with a comma. So
+`arr[::2, ::2]` means "every other row, every other column": `::2` alone
+means "the whole axis, stepping by 2."
+
+```python
+grid = np.arange(16).reshape(4, 4)
+print(grid)
+print()
+print(grid[::2, ::2])   # every other row, every other column
+```
+
+**Output:**
+
+```text
+[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]
+ [12 13 14 15]]
+
+[[ 0  2]
+ [ 8 10]]
+```
+
+<Exercise id="m1-2.1" client:visible />
+

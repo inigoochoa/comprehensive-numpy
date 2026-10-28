@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import toc from "../data/toc.json";
+
+const totalLessons = (toc as any[]).reduce((s, m) => s + m.lessons.length, 0);
+const totalExercises = (toc as any[]).reduce(
+  (s, m) => s + m.lessons.reduce((ss: number, l: any) => ss + l.exerciseIds.length, 0),
+  0
+);
+const firstLesson = (toc as any[])[0].lessons[0];
+---
+
+<BaseLayout title="Comprehensive NumPy">
+  <main class="landing">
+    <section class="landing__hero">
+      <span class="landing__kicker">Free & open-source</span>
+      <h1>Comprehensive NumPy</h1>
+      <p class="landing__lede">
+        A hands-on, self-paced course: short explanations, real example code,
+        and {totalExercises} coding exercises you run and check instantly — right
+        here in the browser, no installs, no sign-up.
+      </p>
+      <div class="landing__cta-row">
+        <a class="btn btn--primary landing__cta" href={`/module-1/${firstLesson.slug}`}>
+          Start the course →
+        </a>
+        <a class="btn btn--outline" href="https://github.com/YOUR_GH_USERNAME/comprehensive-numpy" target="_blank" rel="noopener">
+          View on GitHub
+        </a>
+      </div>
+      <p class="landing__stats">{toc.length} modules · {totalLessons} lessons · {totalExercises} exercises</p>
+    </section>
+
+    <section class="landing__modules">
+      {(toc as any[]).map((mod) => (
+        <a class="module-card" href={`/module-${mod.module}/00-overview`}>
+          <span class="module-card__number">{mod.module}</span>
+          <div>
+            <h3>{mod.title}</h3>
+            <p>{mod.lessons.length} lessons</p>
+          </div>
+        </a>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .landing {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 5rem;
+  }
+  .landing__hero {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .landing__kicker {
+    display: inline-block;
+    background: var(--color-accent-light);
+    color: var(--color-navy);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-pill);
+    margin-bottom: 1rem;
+  }
+  .landing__hero h1 {
+    font-size: 2.75rem;
+    color: var(--color-navy);
+    margin: 0 0 1rem;
+  }
+  .landing__lede {
+    font-size: 1.1rem;
+    color: var(--color-ink-muted);
+    max-width: 640px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+  .landing__cta-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .landing__cta {
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+  }
+  .landing__stats {
+    color: var(--color-ink-muted);
+    font-size: 0.85rem;
+  }
+  .landing__modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .module-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--color-ink);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .module-card:hover {
+    box-shadow: 0 4px 16px rgb(0 68 129 / 0.1);
+    transform: translateY(-2px);
+  }
+  .module-card__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--color-navy);
+    color: white;
+    font-weight: 700;
+    flex: none;
+  }
+  .module-card h3 {
+    margin: 0 0 0.2rem;
+    font-size: 1rem;
+  }
+  .module-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-ink-muted);
+  }
+</style>

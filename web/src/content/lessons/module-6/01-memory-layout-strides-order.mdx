@@ -1,0 +1,62 @@
+---
+title: 'Memory Layout: Strides & Order'
+module: 6
+moduleTitle: Performance, I/O & Mini-Projects
+lessonNumber: 1
+order: 601
+notebookFile: module_6_performance_projects.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m6-1.1
+- m6-1.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+`.strides` tells you how many **bytes** to step to move one position along
+each axis. For a C-order (row-major, the default) `(2, 3)` array of
+`float64`, moving one column over costs 8 bytes, but moving one row down
+costs `3 * 8 = 24` bytes — because rows are stored one after another in
+memory.
+
+Fortran order (`order="F"`) stores **columns** contiguously instead — the
+strides flip. This is why `.T` (transpose) is instant and never copies data:
+it just swaps the strides and shape, leaving the underlying buffer alone.
+That also means a transposed array is usually **not C-contiguous** anymore.
+When an algorithm (or a library written in C) genuinely needs a contiguous
+buffer, use `np.ascontiguousarray(arr)` — it returns `arr` itself if it's
+already contiguous, and a real copy only if it isn't.
+
+```python
+a = np.arange(6, dtype=np.float64).reshape(2, 3)
+print("C-order strides:", a.strides)       # (24, 8): 24 bytes per row, 8 per column
+print("is C-contiguous:", a.flags["C_CONTIGUOUS"])
+
+at = a.T
+print("\ntransposed strides:", at.strides)   # strides just swapped, no copy
+print("transpose is C-contiguous:", at.flags["C_CONTIGUOUS"])
+print("transpose shares memory with a:", np.shares_memory(a, at))
+
+f = np.asfortranarray(a)
+print("\nFortran-order strides:", f.strides)
+```
+
+**Output:**
+
+```text
+C-order strides: (24, 8)
+is C-contiguous: True
+
+transposed strides: (8, 24)
+transpose is C-contiguous: False
+transpose shares memory with a: True
+
+Fortran-order strides: (8, 16)
+```
+
+<Exercise id="m6-1.1" client:visible />
+
+<Exercise id="m6-1.2" client:visible />
+

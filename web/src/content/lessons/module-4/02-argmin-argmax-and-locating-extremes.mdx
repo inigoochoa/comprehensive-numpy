@@ -1,0 +1,49 @@
+---
+title: argmin/argmax and Locating Extremes
+module: 4
+moduleTitle: Aggregations, Statistics & Sorting
+lessonNumber: 2
+order: 402
+notebookFile: module_4_aggregations_statistics.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m4-2.1
+- m4-2.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+`.max()` tells you the **value**; `.argmax()` tells you **where** it is.
+Called on a flat array, `argmax` returns a single flat index. Called with
+`axis` on a 2-D array, it returns one index per row/column — the position
+*within that row/column*, not a flat index into the whole array.
+
+To turn a flat index (from calling `argmax()` on a 2-D array with no
+`axis`) back into `(row, col)` coordinates, use
+`np.unravel_index(flat_index, arr.shape)`.
+
+```python
+grid = np.array([[3, 9, 1],
+                  [7, 2, 8]])
+
+print("flat argmax:", grid.argmax())                 # index into flattened array
+print("as coords:  ", np.unravel_index(grid.argmax(), grid.shape))
+print("argmax per row (axis=1):", grid.argmax(axis=1))
+print("argmin per column (axis=0):", grid.argmin(axis=0))
+```
+
+**Output:**
+
+```text
+flat argmax: 1
+as coords:   (np.int64(0), np.int64(1))
+argmax per row (axis=1): [1 2]
+argmin per column (axis=0): [0 1 0]
+```
+
+<Exercise id="m4-2.1" client:visible />
+
+<Exercise id="m4-2.2" client:visible />
+

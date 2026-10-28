@@ -1,0 +1,327 @@
+[
+  {
+    "module": 1,
+    "title": "Fundamentals & Array Creation",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Why NumPy? ndarray vs. Python list",
+        "slug": "01-why-numpy-ndarray-vs-python-list",
+        "exerciseIds": [
+          "m1-1.1"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Creating Arrays",
+        "slug": "02-creating-arrays",
+        "exerciseIds": [
+          "m1-2.1"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Array Attributes & Dtypes",
+        "slug": "03-array-attributes-dtypes",
+        "exerciseIds": [
+          "m1-3.1",
+          "m1-3.2"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "Reshaping & Dimensions",
+        "slug": "04-reshaping-dimensions",
+        "exerciseIds": [
+          "m1-4.1"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Combining & Splitting Arrays",
+        "slug": "05-combining-splitting-arrays",
+        "exerciseIds": [
+          "m1-5.1"
+        ]
+      }
+    ]
+  },
+  {
+    "module": 2,
+    "title": "Indexing, Slicing & Views",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Basic Indexing & Slicing",
+        "slug": "01-basic-indexing-slicing",
+        "exerciseIds": [
+          "m2-1.1",
+          "m2-1.2"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Boolean Indexing",
+        "slug": "02-boolean-indexing",
+        "exerciseIds": [
+          "m2-2.1",
+          "m2-2.2"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Fancy Indexing",
+        "slug": "03-fancy-indexing",
+        "exerciseIds": [
+          "m2-3.1",
+          "m2-3.2"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "Views vs. Copies",
+        "slug": "04-views-vs-copies",
+        "exerciseIds": [
+          "m2-4.1",
+          "m2-4.2"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "np.newaxis and ... (Ellipsis)",
+        "slug": "05-np-newaxis-and-ellipsis",
+        "exerciseIds": [
+          "m2-5.1",
+          "m2-5.2"
+        ]
+      }
+    ]
+  },
+  {
+    "module": 3,
+    "title": "Array Operations & Broadcasting",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Universal Functions (ufuncs)",
+        "slug": "01-universal-functions-ufuncs",
+        "exerciseIds": [
+          "m3-1.1",
+          "m3-1.2"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Broadcasting Rules",
+        "slug": "02-broadcasting-rules",
+        "exerciseIds": [
+          "m3-2.1",
+          "m3-2.2"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Vectorization vs. Explicit Loops",
+        "slug": "03-vectorization-vs-explicit-loops",
+        "exerciseIds": [
+          "m3-3.1",
+          "m3-3.2"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "Comparison & Logical Ufuncs",
+        "slug": "04-comparison-logical-ufuncs",
+        "exerciseIds": [
+          "m3-4.1",
+          "m3-4.2"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Outer Operations & Pairwise Computation via Broadcasting",
+        "slug": "05-outer-operations-pairwise-computation-via-broadcasting",
+        "exerciseIds": [
+          "m3-5.1",
+          "m3-5.2"
+        ]
+      },
+      {
+        "number": 6,
+        "title": "Case Study: Vectorizing a Real Loop",
+        "slug": "06-case-study-vectorizing-a-real-loop",
+        "exerciseIds": [
+          "m3-6.1",
+          "m3-6.2"
+        ]
+      }
+    ]
+  },
+  {
+    "module": 4,
+    "title": "Aggregations, Statistics & Sorting",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Aggregations & the axis Parameter",
+        "slug": "01-aggregations-the-axis-parameter",
+        "exerciseIds": [
+          "m4-1.1",
+          "m4-1.2"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "argmin/argmax and Locating Extremes",
+        "slug": "02-argmin-argmax-and-locating-extremes",
+        "exerciseIds": [
+          "m4-2.1",
+          "m4-2.2"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Sorting",
+        "slug": "03-sorting",
+        "exerciseIds": [
+          "m4-3.1",
+          "m4-3.2"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "Unique Values & Counting",
+        "slug": "04-unique-values-counting",
+        "exerciseIds": [
+          "m4-4.1",
+          "m4-4.2"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Putting It Together: Analyzing Daily Temperatures",
+        "slug": "05-putting-it-together-analyzing-daily-temperatures",
+        "exerciseIds": [
+          "m4-5.1"
+        ]
+      }
+    ]
+  },
+  {
+    "module": 5,
+    "title": "Linear Algebra & Random",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Vectors & Dot Products",
+        "slug": "01-vectors-dot-products",
+        "exerciseIds": [
+          "m5-1.1",
+          "m5-1.2"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Matrix Multiplication",
+        "slug": "02-matrix-multiplication",
+        "exerciseIds": [
+          "m5-2.1",
+          "m5-2.2"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Solving Linear Systems",
+        "slug": "03-solving-linear-systems",
+        "exerciseIds": [
+          "m5-3.1",
+          "m5-3.2"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "Eigenvalues & Eigenvectors",
+        "slug": "04-eigenvalues-eigenvectors",
+        "exerciseIds": [
+          "m5-4.1",
+          "m5-4.2"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Random Number Generation with the Generator API",
+        "slug": "05-random-number-generation-with-the-generator-api",
+        "exerciseIds": [
+          "m5-5.1",
+          "m5-5.2"
+        ]
+      },
+      {
+        "number": 6,
+        "title": "Simulation Case Study: Monte Carlo Estimate of π",
+        "slug": "06-simulation-case-study-monte-carlo-estimate-of",
+        "exerciseIds": [
+          "m5-6.1"
+        ]
+      }
+    ]
+  },
+  {
+    "module": 6,
+    "title": "Performance, I/O & Mini-Projects",
+    "lessons": [
+      {
+        "number": 1,
+        "title": "Memory Layout: Strides & Order",
+        "slug": "01-memory-layout-strides-order",
+        "exerciseIds": [
+          "m6-1.1",
+          "m6-1.2"
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Vectorization Performance Patterns",
+        "slug": "02-vectorization-performance-patterns",
+        "exerciseIds": [
+          "m6-2.1",
+          "m6-2.2"
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Saving & Loading Arrays",
+        "slug": "03-saving-loading-arrays",
+        "exerciseIds": [
+          "m6-3.1",
+          "m6-3.2"
+        ]
+      },
+      {
+        "number": 4,
+        "title": "Structured Arrays",
+        "slug": "04-structured-arrays",
+        "exerciseIds": [
+          "m6-4.1",
+          "m6-4.2"
+        ]
+      },
+      {
+        "number": 5,
+        "title": "Capstone: Image Manipulation with NumPy",
+        "slug": "05-capstone-image-manipulation-with-numpy",
+        "exerciseIds": [
+          "m6-5.1"
+        ]
+      },
+      {
+        "number": 6,
+        "title": "Capstone: Analyzing a Stock Price Series",
+        "slug": "06-capstone-analyzing-a-stock-price-series",
+        "exerciseIds": [
+          "m6-6.1"
+        ]
+      }
+    ]
+  }
+]

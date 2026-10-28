@@ -1,0 +1,31 @@
+---
+title: Module 2 Overview
+module: 2
+moduleTitle: Indexing, Slicing & Views
+lessonNumber: null
+order: 200
+notebookFile: module_2_indexing_views.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds: []
+kind: overview
+---
+
+# Module 2 — Indexing, Slicing & Views
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YOUR_GH_USERNAME/numpy-course/blob/main/module_2_indexing_views.ipynb)
+## Welcome
+
+Indexing is how you *select* data out of an array, and it's where NumPy has
+the most surprises for people coming from Python lists — especially around
+whether what you get back is a **view** (shares memory with the original)
+or a **copy** (independent). Getting this wrong is one of the most common
+sources of silent bugs in real NumPy code, so this module slows down and
+builds careful intuition before moving on.
+
+**Learning goals**
+- Index and slice 1-D and multi-D arrays, including negative indices and steps
+- Build and combine boolean masks to filter data
+- Use fancy (integer-array) indexing
+- Know exactly when an operation returns a view vs. a copy — and why it matters
+- Use `np.newaxis` and `...` (Ellipsis) to index higher-dimensional arrays
+
+**Setup** — run this first.

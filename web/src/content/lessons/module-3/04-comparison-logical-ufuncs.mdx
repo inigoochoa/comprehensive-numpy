@@ -1,0 +1,58 @@
+---
+title: Comparison & Logical Ufuncs
+module: 3
+moduleTitle: Array Operations & Broadcasting
+lessonNumber: 4
+order: 304
+notebookFile: module_3_operations_broadcasting.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m3-4.1
+- m3-4.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+Comparison operators (`==`, `!=`, `<`, `<=`, `>`, `>=`) are ufuncs too — they
+return a boolean array instead of raising/short-circuiting like Python's
+`==` on lists does. Combine boolean arrays with `&`, `|`, `~` (never the
+Python keywords `and`/`or`/`not`, which don't work elementwise).
+
+For floating-point data, never compare with `==` directly — use
+`np.isclose(a, b)` (or `np.allclose` for whole arrays), which accounts for
+rounding error. Both also accept an `atol=` (absolute tolerance) keyword,
+useful when the default relative tolerance alone isn't strict enough —
+e.g. when comparing values near zero. `np.where(condition, if_true,
+if_false)` is the vectorized equivalent of a Python ternary/if-else,
+applied elementwise.
+
+```python
+a = np.array([1, 2, 3, 4, 5])
+
+mask = (a > 1) & (a < 5)           # combine with & , not `and`
+print(mask)
+print(a[mask])
+
+print(np.where(a % 2 == 0, "even", "odd"))
+
+x = np.array([0.1 + 0.2, 0.3])
+print(x[0] == x[1])        # False due to floating point!
+print(np.isclose(x[0], x[1]))
+```
+
+**Output:**
+
+```text
+[False  True  True  True False]
+[2 3 4]
+['odd' 'even' 'odd' 'even' 'odd']
+False
+True
+```
+
+<Exercise id="m3-4.1" client:visible />
+
+<Exercise id="m3-4.2" client:visible />
+

@@ -1,0 +1,55 @@
+---
+title: Vectorization Performance Patterns
+module: 6
+moduleTitle: Performance, I/O & Mini-Projects
+lessonNumber: 2
+order: 602
+notebookFile: module_6_performance_projects.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m6-2.1
+- m6-2.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+Three habits keep NumPy code fast:
+
+1. **Never grow an array in a loop.** Appending to a Python list and
+   converting once at the end is fine; calling `np.append`/`np.concatenate`
+   inside a loop reallocates the whole buffer every iteration.
+2. **Preallocate when you must fill incrementally** — `np.empty(shape)` or
+   `np.zeros(shape)` once, then assign into slices.
+3. **Reuse buffers with `out=`** when you don't need the original array
+   anymore — `np.add(a, b, out=a)` writes the result into `a`'s existing
+   memory instead of allocating a new array.
+
+```python
+import time
+
+n = 2_000_000
+a = np.arange(n, dtype=np.float64)
+b = np.ones(n)
+
+start = time.perf_counter()
+c = a + b                      # allocates a brand-new array
+print(f"new allocation: {time.perf_counter() - start:.5f}s")
+
+start = time.perf_counter()
+np.add(a, b, out=a)            # reuses a's memory, no new allocation
+print(f"in-place (out=): {time.perf_counter() - start:.5f}s")
+```
+
+**Output:**
+
+```text
+new allocation: 0.00552s
+in-place (out=): 0.00105s
+```
+
+<Exercise id="m6-2.1" client:visible />
+
+<Exercise id="m6-2.2" client:visible />
+

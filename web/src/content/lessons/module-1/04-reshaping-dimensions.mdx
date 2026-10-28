@@ -1,0 +1,49 @@
+---
+title: Reshaping & Dimensions
+module: 1
+moduleTitle: Fundamentals & Array Creation
+lessonNumber: 4
+order: 104
+notebookFile: module_1_fundamentals.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m1-4.1
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+`.reshape(new_shape)` returns a view with the same data laid out under a
+different shape (total element count must match — use `-1` to let NumPy
+infer one dimension). `.ravel()` flattens to 1-D (a view when possible),
+`.flatten()` always returns a copy. `.T` (or `np.transpose`) swaps axes, and
+`np.newaxis` inserts a new length-1 axis, which is the standard way to turn
+a 1-D array into a row or column vector.
+
+```python
+arr = np.arange(12)
+print(arr.reshape(3, 4))
+print(arr.reshape(3, -1).shape)   # -1 means "figure this dimension out"
+
+col = arr[:4][:, np.newaxis]      # turn a 1-D array into a column vector
+print(col.shape)
+print(arr.reshape(3, 4).T)        # transpose
+```
+
+**Output:**
+
+```text
+[[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+(3, 4)
+(4, 1)
+[[ 0  4  8]
+ [ 1  5  9]
+ [ 2  6 10]
+ [ 3  7 11]]
+```
+
+<Exercise id="m1-4.1" client:visible />
+

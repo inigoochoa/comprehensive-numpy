@@ -1,0 +1,64 @@
+---
+title: Solving Linear Systems
+module: 5
+moduleTitle: Linear Algebra & Random
+lessonNumber: 3
+order: 503
+notebookFile: module_5_linalg_random.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m5-3.1
+- m5-3.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+To solve `Ax = b` for `x`, use `np.linalg.solve(A, b)`. It is faster and
+numerically more stable than computing `np.linalg.inv(A) @ b` — computing
+a full inverse does unnecessary extra work and amplifies floating-point
+error. **Prefer `solve` over `inv` whenever you just need `x`.**
+
+`np.linalg.det(A)` computes the determinant. A matrix with `det(A) == 0`
+is **singular** — it has no unique inverse, and `np.linalg.solve` will
+raise a `LinAlgError` for it.
+
+That said, not every LAPACK build raises reliably for a singular matrix —
+some just hand back `nan`/`inf` values instead of erroring. `np.isfinite(x)`
+is the elementwise check for exactly this: it returns `False` wherever a
+value is `nan` or `inf`, and `True` everywhere else, so `np.all(np.isfinite(x))`
+tells you in one line whether an entire array/result is "clean" (no
+`nan`/`inf` anywhere).
+
+```python
+A = np.array([[3.0, 1.0], [1.0, 2.0]])
+b = np.array([9.0, 8.0])
+
+x = np.linalg.solve(A, b)
+print("solution x:", x)
+print("check A @ x == b:", np.allclose(A @ x, b))
+print("det(A):", np.linalg.det(A))
+
+singular = np.array([[1.0, 2.0], [2.0, 4.0]])   # second row = 2 * first row
+print("det(singular):", np.linalg.det(singular))
+try:
+    np.linalg.solve(singular, np.array([1.0, 2.0]))
+except np.linalg.LinAlgError as e:
+    print("LinAlgError:", e)
+```
+
+**Output:**
+
+```text
+solution x: [2. 3.]
+check A @ x == b: True
+det(A): 5.000000000000001
+det(singular): 0.0
+LinAlgError: Singular matrix
+```
+
+<Exercise id="m5-3.1" client:visible />
+
+<Exercise id="m5-3.2" client:visible />
+

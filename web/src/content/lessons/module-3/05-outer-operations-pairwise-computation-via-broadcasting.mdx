@@ -1,0 +1,52 @@
+---
+title: Outer Operations & Pairwise Computation via Broadcasting
+module: 3
+moduleTitle: Array Operations & Broadcasting
+lessonNumber: 5
+order: 305
+notebookFile: module_3_operations_broadcasting.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m3-5.1
+- m3-5.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+`np.outer(a, b)` computes every product `a[i] * b[j]` and arranges them into
+a matrix of shape `(len(a), len(b))`. More generally, you can build *any*
+pairwise table — differences, distances, comparisons — by reshaping one
+array to a column `(n, 1)` and the other to a row `(1, m)`, then letting
+broadcasting fill in the full `(n, m)` grid. This avoids a nested Python
+loop entirely.
+
+```python
+a = np.array([1, 2, 3])
+b = np.array([10, 20])
+
+print(np.outer(a, b))               # every a[i] * b[j]
+
+# Pairwise absolute differences, without np.outer:
+diffs = np.abs(a[:, np.newaxis] - b[np.newaxis, :])
+print(diffs)
+print(diffs.shape)                   # (3, 2): one row per element of a
+```
+
+**Output:**
+
+```text
+[[10 20]
+ [20 40]
+ [30 60]]
+[[ 9 19]
+ [ 8 18]
+ [ 7 17]]
+(3, 2)
+```
+
+<Exercise id="m3-5.1" client:visible />
+
+<Exercise id="m3-5.2" client:visible />
+

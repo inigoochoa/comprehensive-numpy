@@ -1,0 +1,62 @@
+---
+title: Aggregations & the axis Parameter
+module: 4
+moduleTitle: Aggregations, Statistics & Sorting
+lessonNumber: 1
+order: 401
+notebookFile: module_4_aggregations_statistics.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m4-1.1
+- m4-1.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+`np.sum`, `np.mean`, `np.std`, `np.min`, `np.max` all reduce an array to
+fewer numbers. Called with no `axis`, they collapse the **whole** array to
+a single scalar. With `axis=0` they reduce *along rows* — one result per
+**column**. With `axis=1` they reduce *along columns* — one result per
+**row**.
+
+| Call | Meaning |
+|---|---|
+| `arr.sum()` | one total, whole array |
+| `arr.sum(axis=0)` | one total per column (walks down each column) |
+| `arr.sum(axis=1)` | one total per row (walks across each row) |
+
+Pass `keepdims=True` to keep the reduced axis as length-1 instead of
+dropping it — handy when you want the result to broadcast back against the
+original array.
+
+```python
+grid = np.array([[1, 2, 3],
+                  [4, 5, 6]])
+
+print("whole array sum:", grid.sum())
+print("column sums (axis=0):", grid.sum(axis=0))
+print("row sums (axis=1):   ", grid.sum(axis=1))
+print("row means, keepdims: ", grid.mean(axis=1, keepdims=True).ravel())
+
+# keepdims=True lets you broadcast the result back against the original:
+centered = grid - grid.mean(axis=1, keepdims=True)
+print(centered)
+```
+
+**Output:**
+
+```text
+whole array sum: 21
+column sums (axis=0): [5 7 9]
+row sums (axis=1):    [ 6 15]
+row means, keepdims:  [2. 5.]
+[[-1.  0.  1.]
+ [-1.  0.  1.]]
+```
+
+<Exercise id="m4-1.1" client:visible />
+
+<Exercise id="m4-1.2" client:visible />
+

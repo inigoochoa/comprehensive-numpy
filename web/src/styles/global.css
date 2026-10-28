@@ -1,0 +1,377 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — visual language inspired by BBVA's corporate palette
+ * (color/shape/typography-family only; no BBVA logo, name, or proprietary
+ * typeface is used anywhere). Pass/fail feedback deliberately uses plain
+ * green/red instead of the brand palette — those are universal UX signals,
+ * not brand moments.
+ */
+@theme {
+  --color-navy: #004481;       /* BBVA-style primary brand blue */
+  --color-accent: #001391;     /* vivid CTA / link blue */
+  --color-accent-light: #85c8ff;
+  --color-bg: #f7f8f8;
+  --color-surface: #ffffff;
+  --color-ink: #121212;
+  --color-ink-muted: #5b6168;
+  --color-border: #e3e6e8;
+  --color-success: #0e9f6e;
+  --color-success-bg: #e6f7f1;
+  --color-error: #dc2626;
+  --color-error-bg: #fdecec;
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-pill: 999px;
+  --radius-card: 1rem;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+code,
+pre,
+.cm-editor {
+  font-family: var(--font-mono);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn--primary {
+  background: var(--color-accent);
+  color: white;
+}
+.btn--primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+.btn--outline {
+  background: var(--color-surface);
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.btn--outline:hover:not(:disabled) {
+  background: var(--color-accent-light);
+  color: var(--color-ink);
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--color-ink-muted);
+}
+.btn--ghost:hover:not(:disabled) {
+  color: var(--color-ink);
+}
+
+/* ---------- Exercise widget ---------- */
+.exercise-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+.exercise-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.exercise-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-navy);
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.exercise-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  flex: 1;
+}
+.exercise-card__status--pass {
+  color: var(--color-success);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.exercise-card__problem {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+.exercise-card__problem :not(pre) > code {
+  background: var(--color-bg);
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.25rem;
+}
+.exercise-card__problem pre {
+  background: #0d1117;
+  color: #e6edf3;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  margin: 0.75rem 0;
+}
+.exercise-card__editor {
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+.exercise-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+.exercise-card__output {
+  margin-top: 0.85rem;
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+.exercise-card__output pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-size: 0.85rem;
+}
+.exercise-card__output--pass {
+  background: var(--color-success-bg);
+  border-color: var(--color-success);
+  color: #0b6b4c;
+}
+.exercise-card__output--fail {
+  background: var(--color-error-bg);
+  border-color: var(--color-error);
+  color: #8f1d1d;
+}
+.exercise-card__disclosure {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+.exercise-card__disclosure summary {
+  cursor: pointer;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.exercise-card__solution {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  margin-top: 0.4rem;
+}
+.exercise-card--error {
+  color: var(--color-error);
+}
+
+/* ---------- Layout ---------- */
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 860px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+}
+.sidebar {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+}
+.sidebar__brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-navy);
+  margin-bottom: 1rem;
+  display: block;
+  text-decoration: none;
+}
+.sidebar__progress-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+  margin-bottom: 0.3rem;
+}
+.sidebar__progress-fill {
+  height: 100%;
+  background: var(--color-navy);
+  border-radius: var(--radius-pill);
+  transition: width 0.3s ease;
+}
+.sidebar__progress-label {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  margin-bottom: 1.25rem;
+  display: block;
+}
+.sidebar__module {
+  margin-bottom: 0.6rem;
+}
+.sidebar__module-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-ink-muted);
+  padding: 0.4rem 0.5rem;
+  display: block;
+  text-decoration: none;
+}
+.sidebar__lesson {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+.sidebar__lesson:hover {
+  background: var(--color-bg);
+}
+.sidebar__lesson[aria-current="page"] {
+  background: var(--color-accent-light);
+  color: var(--color-navy);
+  font-weight: 600;
+  border-left: 3px solid var(--color-navy);
+}
+.sidebar__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-ink-muted);
+  flex: none;
+}
+.sidebar__lesson[data-done="true"] .sidebar__dot {
+  background: var(--color-success);
+  border-color: var(--color-success);
+}
+.content {
+  padding: 2.5rem 3rem 5rem;
+  max-width: 820px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-self: center;
+}
+@media (max-width: 860px) {
+  .content {
+    padding: 1.5rem 1.25rem 3rem;
+  }
+}
+.content h1 {
+  font-size: 1.9rem;
+  color: var(--color-navy);
+  margin-bottom: 0.25rem;
+}
+.content h2 {
+  font-size: 1.4rem;
+  margin-top: 2.25rem;
+  color: var(--color-ink);
+}
+.content h3 {
+  font-size: 1.1rem;
+  margin-top: 1.75rem;
+}
+.content p,
+.content li {
+  line-height: 1.65;
+  color: var(--color-ink);
+}
+.content pre {
+  background: #0d1117;
+  color: #e6edf3;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+.content :not(pre) > code {
+  background: var(--color-bg);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.3rem;
+  font-size: 0.88em;
+}
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.content th,
+.content td {
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.content th {
+  background: var(--color-bg);
+}
+.cell-output-image {
+  max-width: 100%;
+  border-radius: 0.6rem;
+  border: 1px solid var(--color-border);
+  margin: 0.5rem 0;
+}
+.lesson-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+.lesson-nav a {
+  text-decoration: none;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.lesson-extras {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+.lesson-extras a {
+  color: var(--color-ink-muted);
+  text-decoration: none;
+}
+.lesson-extras a:hover {
+  color: var(--color-accent);
+}

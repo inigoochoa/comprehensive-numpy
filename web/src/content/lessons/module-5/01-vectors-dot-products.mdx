@@ -1,0 +1,56 @@
+---
+title: Vectors & Dot Products
+module: 5
+moduleTitle: Linear Algebra & Random
+lessonNumber: 1
+order: 501
+notebookFile: module_5_linalg_random.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m5-1.1
+- m5-1.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+The **dot product** of two same-length vectors, `np.dot(a, b)` or simply
+`a @ b`, multiplies corresponding elements and sums the results. It shows
+up everywhere: it's the core of matrix multiplication (next lesson), and
+`np.linalg.norm(v)` — a vector's length/magnitude — is just
+`sqrt(v @ v)`.
+
+A useful derived quantity is **cosine similarity**, which measures the
+angle between two vectors regardless of their length:
+
+```
+cos(theta) = (a @ b) / (||a|| * ||b||)
+```
+
+It ranges from `-1` (opposite direction) to `1` (same direction), with `0`
+meaning the vectors are orthogonal.
+
+```python
+a = np.array([1.0, 2.0, 3.0])
+b = np.array([4.0, 5.0, 6.0])
+
+print("dot:   ", np.dot(a, b), a @ b)
+print("norm a:", np.linalg.norm(a), np.sqrt(a @ a))
+
+cos_theta = (a @ b) / (np.linalg.norm(a) * np.linalg.norm(b))
+print("cos similarity:", cos_theta)
+```
+
+**Output:**
+
+```text
+dot:    32.0 32.0
+norm a: 3.7416573867739413 3.7416573867739413
+cos similarity: 0.9746318461970762
+```
+
+<Exercise id="m5-1.1" client:visible />
+
+<Exercise id="m5-1.2" client:visible />
+

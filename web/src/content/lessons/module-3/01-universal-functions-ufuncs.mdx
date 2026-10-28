@@ -1,0 +1,54 @@
+---
+title: Universal Functions (ufuncs)
+module: 3
+moduleTitle: Array Operations & Broadcasting
+lessonNumber: 1
+order: 301
+notebookFile: module_3_operations_broadcasting.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m3-1.1
+- m3-1.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+A **ufunc** is a function that operates elementwise on arrays, implemented
+in compiled C, supporting broadcasting, type casting, and more. Most of the
+math you already use is a ufunc: `arr + 1` is shorthand for
+`np.add(arr, 1)`, and `arr1 * arr2` is shorthand for `np.multiply(arr1, arr2)`.
+
+| Category | Examples |
+|---|---|
+| Unary (one array in) | `np.sqrt`, `np.exp`, `np.log`, `np.abs`, `np.negative` |
+| Binary (two arrays in) | `np.add`, `np.subtract`, `np.multiply`, `np.divide`, `np.power` |
+
+Because ufuncs are just functions, you can call them directly when you want
+to pass extra keyword arguments (like `out=` to write into an existing
+array) that an operator like `+` doesn't give you access to.
+
+```python
+a = np.array([1.0, 4.0, 9.0, 16.0])
+
+print(a + 1)              # operator form
+print(np.add(a, 1))       # explicit ufunc form -- identical result
+
+print(np.sqrt(a))         # unary ufunc
+print(np.multiply(a, 2))  # binary ufunc
+```
+
+**Output:**
+
+```text
+[ 2.  5. 10. 17.]
+[ 2.  5. 10. 17.]
+[1. 2. 3. 4.]
+[ 2.  8. 18. 32.]
+```
+
+<Exercise id="m3-1.1" client:visible />
+
+<Exercise id="m3-1.2" client:visible />
+

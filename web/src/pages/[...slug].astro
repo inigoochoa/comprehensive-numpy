@@ -1,0 +1,54 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Sidebar from "../components/Sidebar.astro";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("lessons");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const allEntries = (await getCollection("lessons")).sort((a, b) => a.data.order - b.data.order);
+const index = allEntries.findIndex((e) => e.id === entry.id);
+const prev = index > 0 ? allEntries[index - 1] : null;
+const next = index < allEntries.length - 1 ? allEntries[index + 1] : null;
+
+const notebookDownloadHref = `/notebooks/${entry.data.notebookFile}`;
+const colabHref = `https://colab.research.google.com/github/${entry.data.colabRepo}/blob/main/${entry.data.notebookFile}`;
+---
+
+<BaseLayout title={`${entry.data.title} · Comprehensive NumPy`}>
+  <div class="app-shell">
+    <Sidebar currentSlug={entry.id} />
+    <main class="content">
+      {entry.data.kind === "lesson" && (
+        <p style="color: var(--color-ink-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">
+          Module {entry.data.module} · Lesson {entry.data.lessonNumber}
+        </p>
+      )}
+      <h1>{entry.data.title}</h1>
+
+      <div class="lesson-extras">
+        <a href={notebookDownloadHref} download>⬇ Download notebook</a>
+        <a href={colabHref} target="_blank" rel="noopener">▶ Open in Colab</a>
+      </div>
+
+      <Content />
+
+      <nav class="lesson-nav">
+        <div>
+          {prev && <a href={`/${prev.id}`}>← {prev.data.title}</a>}
+        </div>
+        <div>
+          {next && <a href={`/${next.id}`}>{next.data.title} →</a>}
+        </div>
+      </nav>
+    </main>
+  </div>
+</BaseLayout>

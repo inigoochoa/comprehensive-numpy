@@ -1,0 +1,48 @@
+---
+title: Unique Values & Counting
+module: 4
+moduleTitle: Aggregations, Statistics & Sorting
+lessonNumber: 4
+order: 404
+notebookFile: module_4_aggregations_statistics.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m4-4.1
+- m4-4.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+`np.unique(arr)` returns the sorted distinct values in an array. Pass
+`return_counts=True` to also get how many times each value occurred, or
+`return_index=True` to get the index of each value's **first** occurrence.
+Both are commonly used together with the unique values to build a simple
+frequency table.
+
+```python
+votes = np.array(["cat", "dog", "cat", "cat", "fox", "dog"])
+
+values, counts = np.unique(votes, return_counts=True)
+print("values:", values)
+print("counts:", counts)
+
+for value, count in zip(values, counts):
+    print(f"{value}: {count}")
+```
+
+**Output:**
+
+```text
+values: ['cat' 'dog' 'fox']
+counts: [3 2 1]
+cat: 3
+dog: 2
+fox: 1
+```
+
+<Exercise id="m4-4.1" client:visible />
+
+<Exercise id="m4-4.2" client:visible />
+

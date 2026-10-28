@@ -1,0 +1,91 @@
+---
+title: 'Case Study: Vectorizing a Real Loop'
+module: 3
+moduleTitle: Array Operations & Broadcasting
+lessonNumber: 6
+order: 306
+notebookFile: module_3_operations_broadcasting.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m3-6.1
+- m3-6.2
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+Let's take a realistic loop-based function and vectorize it end to end.
+
+```python
+def score_loop(values):
+    """Clip each value into [0, 100], then apply a bonus:
+    +10 if the clipped value is above 80, otherwise no bonus."""
+    out = []
+    for v in values:
+        v = max(0, min(100, v))
+        if v > 80:
+            v += 10
+        out.append(v)
+    return out
+```
+
+A tempting shortcut is `np.vectorize(score_loop_single_element)`: it *looks*
+vectorized because it accepts arrays, but internally it still calls your
+Python function once per element in a Python loop — you get NumPy's
+*syntax* without NumPy's *speed*. Prefer composing real ufuncs
+(`np.clip`, `np.where`, comparisons) instead.
+
+```python
+def score_loop(values):
+    out = []
+    for v in values:
+        v = max(0, min(100, v))
+        if v > 80:
+            v += 10
+        out.append(v)
+    return out
+
+
+def score_vectorized(values):
+    clipped = np.clip(values, 0, 100)
+    return np.where(clipped > 80, clipped + 10, clipped)
+
+
+sample = [-5, 50, 85, 120]
+print(score_loop(sample))
+print(score_vectorized(np.array(sample)))
+```
+
+**Output:**
+
+```text
+[0, 50, 95, 110]
+[  0  50  95 110]
+```
+
+<Exercise id="m3-6.1" client:visible />
+
+<Exercise id="m3-6.2" client:visible />
+
+---
+
+## 🎯 Key Takeaways
+
+- Operators (`+`, `*`, `>`, ...) are shorthand for **ufuncs**
+  (`np.add`, `np.multiply`, `np.greater`, ...) running in compiled code.
+- Broadcasting compares shapes right-to-left: equal dims match, size-1 dims
+  stretch, anything else raises `ValueError`.
+- A vectorized rewrite of a loop isn't just shorter — it's dramatically
+  faster, because per-element Python overhead disappears.
+- Build boolean masks with `&`/`|`/`~` and `np.where`; never trust `==` on
+  floats — use `np.isclose`/`np.allclose`.
+- `np.outer` and `[:, np.newaxis]` / `[np.newaxis, :]` broadcasting build
+  full pairwise tables without nested loops.
+- `np.vectorize` is a convenience for mapping a scalar function over an
+  array — it does **not** give you a real performance improvement; prefer
+  composing real ufuncs.
+
+Next up: **Module 4 — Aggregations, Statistics & Sorting**, where you'll
+learn to summarize and reorder array data along any axis.
+

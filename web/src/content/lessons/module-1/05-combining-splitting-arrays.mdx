@@ -1,0 +1,78 @@
+---
+title: Combining & Splitting Arrays
+module: 1
+moduleTitle: Fundamentals & Array Creation
+lessonNumber: 5
+order: 105
+notebookFile: module_1_fundamentals.ipynb
+colabRepo: YOUR_GH_USERNAME/comprehensive-numpy
+exerciseIds:
+- m1-5.1
+kind: lesson
+---
+
+import Exercise from "../../../components/Exercise";
+
+
+- `np.concatenate([a, b], axis=...)` joins arrays along an existing axis
+  (shapes must match on every other axis).
+- `np.vstack` / `np.hstack` are convenience wrappers for concatenating along
+  axis 0 / axis 1.
+- `np.stack([a, b], axis=...)` joins arrays along a **new** axis instead —
+  use this when you want to go from several `(n,)` arrays to one `(2, n)`
+  or `(n, 2)` array.
+- `np.split(arr, n, axis=...)` divides an array into `n` equal pieces along
+  an axis.
+
+```python
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+print(np.concatenate([a, b]))          # (6,)
+print(np.stack([a, b]))                # (2, 3) — new axis 0
+print(np.stack([a, b], axis=1))        # (3, 2) — new axis 1
+
+m = np.arange(8).reshape(2, 4)
+left, right = np.split(m, 2, axis=1)
+print(left)
+print(right)
+```
+
+**Output:**
+
+```text
+[1 2 3 4 5 6]
+[[1 2 3]
+ [4 5 6]]
+[[1 4]
+ [2 5]
+ [3 6]]
+[[0 1]
+ [4 5]]
+[[2 3]
+ [6 7]]
+```
+
+<Exercise id="m1-5.1" client:visible />
+
+---
+
+## 🎯 Key Takeaways
+
+- NumPy arrays beat Python lists for numeric work because they're
+  contiguous, fixed-type, and support **vectorized** operations in compiled
+  code.
+- Pick the right creation function for the job: `np.array` from existing
+  data, `np.zeros`/`ones`/`full`/`eye` for placeholders, `np.arange`/
+  `np.linspace` for ranges.
+- `.shape`, `.ndim`, `.size`, `.dtype` tell you everything about an array's
+  layout; `.astype` converts between dtypes (and can silently lose data).
+- `.reshape`, `.ravel`, `.flatten`, `.T`, and `np.newaxis` rearrange data
+  without changing its values.
+- `np.concatenate`/`vstack`/`hstack` join along an existing axis;
+  `np.stack` creates a new one.
+
+Next up: **Module 2 — Indexing, Slicing & Views**, where you'll learn how
+to select exactly the data you want — and which selections give you a view
+vs. a copy.
+
