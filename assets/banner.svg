@@ -1,0 +1,68 @@
+<svg width="1200" height="300" viewBox="0 0 1200 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <clipPath id="frame">
+      <rect x="0" y="0" width="1200" height="300" rx="18" />
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <!-- background -->
+    <rect x="0" y="0" width="1200" height="300" fill="#F7F8F8" />
+
+    <!-- array/checkerboard motif, top-right -->
+    <g transform="translate(860,40)">
+      <!-- 6x5 grid, cell 32, gap 8 -->
+      <!-- row 0 -->
+      <rect x="0"   y="0"   width="32" height="32" rx="4" fill="#004481"/>
+      <rect x="40"  y="0"   width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="80"  y="0"   width="32" height="32" rx="4" fill="#85C8FF"/>
+      <rect x="120" y="0"   width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="160" y="0"   width="32" height="32" rx="4" fill="#001391"/>
+      <rect x="200" y="0"   width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <!-- row 1 -->
+      <rect x="0"   y="40"  width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="40"  y="40"  width="32" height="32" rx="4" fill="#85C8FF"/>
+      <rect x="80"  y="40"  width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="120" y="40"  width="32" height="32" rx="4" fill="#004481"/>
+      <rect x="160" y="40"  width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="200" y="40"  width="32" height="32" rx="4" fill="#85C8FF"/>
+      <!-- row 2 -->
+      <rect x="0"   y="80"  width="32" height="32" rx="4" fill="#001391"/>
+      <rect x="40"  y="80"  width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="80"  y="80"  width="32" height="32" rx="4" fill="#004481"/>
+      <rect x="120" y="80"  width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="160" y="80"  width="32" height="32" rx="4" fill="#85C8FF"/>
+      <rect x="200" y="80"  width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <!-- row 3 -->
+      <rect x="0"   y="120" width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="40"  y="120" width="32" height="32" rx="4" fill="#004481"/>
+      <rect x="80"  y="120" width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="120" y="120" width="32" height="32" rx="4" fill="#85C8FF"/>
+      <rect x="160" y="120" width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="200" y="120" width="32" height="32" rx="4" fill="#001391"/>
+      <!-- row 4 -->
+      <rect x="0"   y="160" width="32" height="32" rx="4" fill="#85C8FF"/>
+      <rect x="40"  y="160" width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="80"  y="160" width="32" height="32" rx="4" fill="#001391"/>
+      <rect x="120" y="160" width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+      <rect x="160" y="160" width="32" height="32" rx="4" fill="#004481"/>
+      <rect x="200" y="160" width="32" height="32" rx="4" fill="#F7F8F8" stroke="#E3E6E8"/>
+    </g>
+
+    <!-- kicker pill -->
+    <rect x="60" y="42" width="236" height="32" rx="16" fill="#85C8FF"/>
+    <text x="178" y="63" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="1" fill="#004481">FREE &amp; OPEN-SOURCE</text>
+
+    <!-- title -->
+    <text x="58" y="148" font-size="56" font-weight="800" letter-spacing="-1" fill="#004481">Comprehensive NumPy</text>
+
+    <!-- tagline -->
+    <text x="60" y="190" font-size="22" fill="#5B6168">Learn NumPy by doing — run real code, right in your browser.</text>
+
+    <!-- stats -->
+    <text x="60" y="230" font-size="17" font-weight="600" fill="#001391">6 modules  ·  33 lessons  ·  58 exercises</text>
+
+    <!-- bottom accent bar -->
+    <rect x="0" y="294" width="1200" height="6" fill="#004481"/>
+  </g>
+</svg>

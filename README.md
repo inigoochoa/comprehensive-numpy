@@ -1,10 +1,21 @@
-# Comprehensive NumPy
+<p align="center">
+  <a href="https://numpy.inigoochoa.com">
+    <img src="assets/banner.svg" alt="Comprehensive NumPy — learn NumPy by doing, run real code in your browser" width="100%">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://numpy.inigoochoa.com"><img alt="Live demo" src="https://img.shields.io/badge/demo-live-004481?style=flat-square"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-001391?style=flat-square"></a>
+  <img alt="58 exercises" src="https://img.shields.io/badge/exercises-58-004481?style=flat-square">
+  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-004481?style=flat-square">
+</p>
 
 A hands-on, self-paced NumPy course modeled on [StrataScratch's Comprehensive Python](https://www.stratascratch.com/learn/comprehensive-python): short explanations, real example code, and inline coding exercises you can run and check immediately — no video, no paywall, no sign-up.
 
 **Who this is for:** you're comfortable with Python (variables, functions, loops, lists) but new to NumPy.
 
-**Format:** 6 Jupyter notebooks (one per module), 33 lessons, 58 coding exercises. Every exercise has an instant pass/fail check, a hint, and a full solution — both collapsed by default so you're not spoiled unless you ask to be (same idea as the exercise notebooks in Andrew Ng's ML courses).
+**Format:** 6 Jupyter notebooks (one per module), 33 lessons, 58 coding exercises. Every exercise runs your code and prints what it actually returns, with a hint and a full solution — both collapsed by default so you're not spoiled unless you ask to be (same idea as the exercise notebooks in Andrew Ng's ML courses).
 
 **Prefer a website?** There's also an interactive, StrataScratch-style course site in [`web/`](web/) — same content, runs real NumPy in the browser via Pyodide, no installs. See [`web/README.md`](web/README.md).
 
